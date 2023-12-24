@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "client": "npm run start --prefix client",
-    "dev": "concurrently \"npm run client\" \"nodemon index.js\"" 
+    "dev": "concurrently \"npm run client\" \"nodemon index.js\""
   },
   "author": "Malay Sarkar",
   "license": "ISC",
@@ -17,6 +17,7 @@
     "express": "^4.18.2",
     "mongoose": "^8.0.3",
     "passport": "^0.5.3",
-    "passport-google-oauth20": "^2.0.0"
+    "passport-google-oauth20": "^2.0.0",
+    "react-router-dom": "^6.21.1"
   }
 }

@@ -30,7 +30,7 @@ passport.deserializeUser((id, done) => {
 });
 
 app.get("/current-user", (req, res) => {
-  console.log("current-user req", req);
+  console.log("current-user req", req.user);
   res.send(req.user);
 });
 
