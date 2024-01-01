@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { getAbsoluteUrl } from "../helpers";
 import { Link } from "react-router-dom";
 import google_logo from "../assets/google-logo.png";
@@ -38,4 +39,4 @@ const LandingPage = (props) => {
   );
 };
 
-export default LandingPage;
+export default memo(LandingPage);

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, memo } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { getUser } from "../helpers";
 
@@ -18,4 +18,4 @@ const AuthCheckLayout = () => {
   return <Outlet />;
 };
 
-export default AuthCheckLayout;
+export default memo(AuthCheckLayout);
