@@ -1,9 +1,13 @@
 import { memo, useCallback } from "react";
 
-const FileUploadStatusModal = ({ setShowFileUploadStatusModal }) => {
+const FileUploadStatusModal = ({
+  setShowFileUploadStatusModal,
+  setUploadSuccessful,
+}) => {
   const handleClick = useCallback(() => {
     setShowFileUploadStatusModal(false);
-  }, [setShowFileUploadStatusModal]);
+    setUploadSuccessful(true);
+  }, [setShowFileUploadStatusModal, setUploadSuccessful]);
   return (
     <div className="fileuploadstatusmodal">
       <div className="statustext">File uploaded successfully.</div>

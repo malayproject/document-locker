@@ -79,11 +79,46 @@ module.exports = (app) => {
   );
 
   app.get("/api/files", corsMiddleware, async (req, res) => {
+    const { page, limit } = req.query;
     try {
-      const filesRes = await FileModel.find({ userId: req.user?.id }).exec();
+      const filesRes = await FileModel.find({ userId: req.user?.id })
+        .sort({ createdAt: -1 })
+        .limit(limit)
+        .skip((page - 1) * limit)
+        .exec();
+
+      const count = await FileModel.countDocuments({
+        userId: req.user?.id,
+      }).exec();
 
       console.log("all files 84", filesRes);
-      res.status(200).json({ fileCount: filesRes.length, files: filesRes });
+      res.status(200).json({ totalFileCount: count, files: filesRes });
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
+  });
+
+  app.get("/api/files/count", corsMiddleware, async (req, res) => {
+    try {
+      const count = await FileModel.countDocuments({
+        userId: req.user?.id,
+      }).exec();
+      console.log("response 95", count);
+      res.status(200).json({ fileCount: count });
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
+  });
+
+  app.delete("/api/file/:id", corsMiddleware, async (req, res) => {
+    const { id: fileId } = req.params;
+    console.log("115", req.params);
+    try {
+      const mongoRes = await FileModel.findOneAndUpdate(
+        { _id: fileId },
+        { markedDeleted: true }
+      );
+      res.status(200).json({ fileId });
     } catch (err) {
       res.status(400).json({ message: err.message });
     }

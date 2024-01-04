@@ -6,14 +6,25 @@ import img from "../assets/google-logo.png";
 import Sidebar from "../components/Sidebar";
 import FileUploadConfirmationModal from "../components/FileUploadConfirmationModal";
 import FileUploadStatusModal from "../components/FileUploadStatusModal";
+// import BaseTable from "../tableConfig/BaseTable.js";
+// import GlobalFilteringTable from "../tableConfig/GlobalFilteringTable.js";
+import TableManager from "../tableConfig/TableManager.js";
+import FileInfoModal from "../components/FileInfoModal.js";
+import FileSoftDeleteConfirmationModal from "../components/FileSoftDeleteConfirmationModal.js";
 
 const Home = (props) => {
   const navigate = useNavigate();
   const [file, setFile] = useState(null);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [forceUpload, setForceUpload] = useState(false);
+  const [uploadSuccessful, setUploadSuccessful] = useState(false);
   const [showFileUploadStatusModal, setShowFileUploadStatusModal] =
     useState(false);
+  const [showFileInfoModal, setShowFileInfoModal] = useState(false);
+  const [selectedFileInfo, setSelectedFileInfo] = useState(null);
+  const [showFileSoftDeleteConfModal, setShowFileSoftDeleteConfModal] =
+    useState(false);
+  const [isFileUpdating, setIsFileUpdating] = useState(false);
 
   const handleLogout = async (e) => {
     try {
@@ -51,6 +62,7 @@ const Home = (props) => {
   useEffect(() => {
     (async () => {
       try {
+        setUploadSuccessful(false);
         const formData = new FormData();
         console.log(img);
         if (file) {
@@ -87,7 +99,15 @@ const Home = (props) => {
         handleLogout={handleLogout}
         file={file}
       />
-      <div className="mainContainer"></div>
+      <TableManager
+        uploadSuccessful={uploadSuccessful}
+        setShowFileInfoModal={setShowFileInfoModal}
+        setSelectedFileInfo={setSelectedFileInfo}
+        setShowFileSoftDeleteConfModal={setShowFileSoftDeleteConfModal}
+        setIsFileUpdating={setIsFileUpdating}
+        isFileUpdating={isFileUpdating}
+      />
+      {/* <BaseTable uploadSuccessful={uploadSuccessful} /> */}
       {showConfirmationModal && (
         <FileUploadConfirmationModal
           setShowConfirmationModal={setShowConfirmationModal}
@@ -98,6 +118,20 @@ const Home = (props) => {
       {showFileUploadStatusModal && (
         <FileUploadStatusModal
           setShowFileUploadStatusModal={setShowFileUploadStatusModal}
+          setUploadSuccessful={setUploadSuccessful}
+        />
+      )}
+      {showFileInfoModal && (
+        <FileInfoModal
+          setShowFileInfoModal={setShowFileInfoModal}
+          selectedFileInfo={selectedFileInfo}
+        />
+      )}
+      {showFileSoftDeleteConfModal && (
+        <FileSoftDeleteConfirmationModal
+          setShowFileSoftDeleteConfModal={setShowFileSoftDeleteConfModal}
+          isFileUpdating={isFileUpdating}
+          selectedFileInfo={selectedFileInfo}
         />
       )}
     </div>

@@ -16,6 +16,7 @@ function App() {
             element={<Navigate to="home" />}
           />
         </Route>
+        <Route path="/*" element={<h1>Wrong path</h1>} />
       </Routes>
     </BrowserRouter>
   );

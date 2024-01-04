@@ -5,8 +5,9 @@
 }
 
 body {
-  background-color: aqua;
+  /* background-color: rgb(227, 255, 255); */
   min-height: 100vh;
+  /* position: relative; */
 }
 
 .landing {
@@ -87,14 +88,14 @@ body {
 
 .home {
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   position: relative;
 }
 
 .home .sidebar {
   width: 15%;
-  height: 100vh;
+  min-height: 100vh;
   background-color: rgb(255, 255, 255);
   /* box-shadow: -1rem -1rem 1.6rem 0.6rem rgb(53, 53, 53); */
   /* border: 1px solid red; */
@@ -163,7 +164,7 @@ body {
 .home .mainContainer {
   width: 85%;
   height: 100%;
-  background-color: rgb(221, 245, 253);
+  background-color: rgb(255, 255, 255);
   padding: 3rem;
 }
 
@@ -187,4 +188,192 @@ body {
   border-radius: 0.4rem;
   box-shadow: 0rem 0rem 1rem 0.02rem grey;
   background-color: antiquewhite;
+}
+
+.home .filesoftdeleteconfmodal {
+  position: fixed;
+  width: 20rem;
+  height: 10rem;
+  left: calc(50% - 10rem);
+  top: calc(50% - 5rem);
+  border-radius: 0.4rem;
+  box-shadow: 0rem 0rem 1rem 0.02rem grey;
+  background-color: antiquewhite;
+}
+
+.home .fileInfoModal {
+  position: fixed;
+  width: 40rem;
+  height: 30rem;
+  left: calc(50% - 20rem);
+  top: calc(50% - 15rem);
+  border-radius: 0.4rem;
+  box-shadow: 0rem 0rem 1rem 0.02rem grey;
+  background-color: antiquewhite;
+  display: flex;
+  flex-direction: column;
+}
+
+.tableManager {
+  /* display: flex;
+  flex-direction: column; */
+  width: 100%;
+  min-height: 100vh;
+  height: 100%;
+  position: relative;
+  /* margin-bottom: 5rem; */
+  /* background-color: chocolate; */
+}
+
+.paginationComponent {
+  display: flex;
+  width: 100%;
+  /* background-color: #42444d; */
+  color: white;
+  /* margin-top: 2rem; */
+  position: sticky;
+  bottom: 0;
+}
+
+.paginationComponent .rowsPerPageContainer {
+  flex-basis: 20%;
+  flex-grow: 1;
+  flex-shrink: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #293531;
+  /* border-radius: 0 0 0 1rem; */
+}
+
+.paginationComponent .pageController {
+  flex-basis: 80%;
+  flex-grow: 1;
+  flex-shrink: 1;
+  /* background-color: #49ffbc; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 2.2rem;
+  gap: 3rem;
+  background-color: #293531;
+  /* border-radius: 0 0 1rem 0; */
+}
+
+.pageController .pages {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.pageController .right {
+  display: flex;
+  gap: 1rem;
+}
+
+.filesTable {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  /* min-height: 100vh; */
+  /* border-radius: 1rem; */
+}
+
+/* .filestable tbody {
+  height: 30rem;
+  overflow-y: auto;
+} */
+
+.filesTable tr {
+  height: 2.4rem;
+}
+
+.filesTable td, .filesTable th {
+  border: 1px solid #ddd;
+  padding: 8px;
+  /* height: 30px; */
+}
+
+.filesTable th:first-child {
+  border-radius: 1rem 0 0 0;
+}
+
+.filesTable th:last-child {
+border-radius: 0 1rem 0 0;
+}
+
+.filesTable tr:nth-child(even){background-color: #f2f2f2;}
+
+.filesTable tr:hover {background-color: #ddd;}
+
+.filesTable th, tfoot td {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+  background-color: #42444d;
+  color: white;
+}
+
+tbody td {
+  cursor: pointer;
+}
+
+.loadingtable {
+  width: 100%;
+  height: 50.8rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.fileInfoModal .modalHeader {
+  height: 3rem;
+  font-size: 1.4rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  padding-left: 1rem;
+}
+
+.fileInfoModal .modalBody {
+  display: flex;
+  background-color: darkcyan;
+  height: 20rem;
+  /* padding: 2rem; */
+}
+
+.modalBody .bodyLeft {
+  flex-basis: 60%;
+  background-color: aquamarine;
+  
+}
+
+.modalBody .bodyRight {
+  flex-basis: 40%;
+  background-color: rgb(83, 252, 195);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalBody .fileImage {
+  width: 10rem;
+  height: 10rem;
+  background-image: url('./assets/file-512.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  /* background-color: aqua; */
+  position: relative;
+}
+
+.modalBody .fileText {
+  position: absolute;
+  right: 1.4rem;
+  bottom: 2rem;
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: white;
+  padding: 0.1rem 0.8rem;
+  background-color: #333333;
+  border-radius: 0.3rem;
 }
