@@ -79,9 +79,12 @@ module.exports = (app) => {
   );
 
   app.get("/api/files", corsMiddleware, async (req, res) => {
-    const { page, limit } = req.query;
+    const { page, limit, markedDeleted } = req.query;
     try {
-      const filesRes = await FileModel.find({ userId: req.user?.id })
+      const filesRes = await FileModel.find({
+        userId: req.user?.id,
+        markedDeleted: markedDeleted,
+      })
         .sort({ createdAt: -1 })
         .limit(limit)
         .skip((page - 1) * limit)
@@ -89,6 +92,7 @@ module.exports = (app) => {
 
       const count = await FileModel.countDocuments({
         userId: req.user?.id,
+        markedDeleted: markedDeleted,
       }).exec();
 
       console.log("all files 84", filesRes);
@@ -112,11 +116,12 @@ module.exports = (app) => {
 
   app.delete("/api/file/:id", corsMiddleware, async (req, res) => {
     const { id: fileId } = req.params;
+    const { restore = false } = req.query;
     console.log("115", req.params);
     try {
       const mongoRes = await FileModel.findOneAndUpdate(
         { _id: fileId },
-        { markedDeleted: true }
+        { markedDeleted: !restore }
       );
       res.status(200).json({ fileId });
     } catch (err) {

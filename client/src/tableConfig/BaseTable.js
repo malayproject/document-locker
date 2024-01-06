@@ -1,17 +1,19 @@
-import { useEffect, useState, useMemo, memo } from "react";
+import { useMemo, memo } from "react";
 import { useRowSelect, useTable } from "react-table";
-import axios from "axios";
 import COLUMNS from "./columns";
 import Checkbox from "../components/Checkbox";
+import { useDispatch, useSelector } from "react-redux";
 
-const BaseTable = ({
-  filesData,
-  setShowFileInfoModal,
-  setSelectedFileInfo,
-  setShowFileSoftDeleteConfModal,
-  setIsFileUpdating,
-  isFileUpdating,
-}) => {
+const BaseTable = ({ setIsFileUpdating, isFileUpdating }) => {
+  const dispatch = useDispatch();
+
+  const selectedFile = useSelector((state) => state.selectFile.selectedFile);
+
+  const { showFileInfoModal, showFileSoftDeleteConfirmationModal } =
+    useSelector((state) => state.showModals);
+
+  const filesData = useSelector((state) => state.tableData.files);
+
   const data = useMemo(() => filesData, [filesData]);
   const columns = useMemo(() => COLUMNS, []);
   const {
@@ -36,6 +38,7 @@ const BaseTable = ({
             Header: ({ getToggleAllRowsSelectedProps }) => {
               return <Checkbox {...getToggleAllRowsSelectedProps()} />;
             },
+            width: 60,
             Cell: ({ row }) => {
               return <Checkbox {...row.getToggleRowSelectedProps()} />;
             },
@@ -50,8 +53,8 @@ const BaseTable = ({
     if (e.target.tagName === "INPUT") return;
     console.log("handleRowClick 44", e);
     console.log("handleRowClick 45", row);
-    setSelectedFileInfo(row.original);
-    setShowFileInfoModal(true);
+    dispatch({ type: "SELECT_FILE", payload: row.original });
+    dispatch({ type: "FILE_INFO_MODAL", payload: true });
   };
 
   console.log("getTableBodyProps 21", getTableBodyProps());
@@ -78,7 +81,6 @@ const BaseTable = ({
       >
         {rows.map((row) => {
           prepareRow(row);
-          // console.log("row 66", row);
           return (
             <tr
               {...row.getRowProps({
@@ -91,8 +93,7 @@ const BaseTable = ({
                 return (
                   <td {...cell.getCellProps()}>
                     {cell.render("Cell", {
-                      setShowFileSoftDeleteConfModal,
-                      setSelectedFileInfo,
+                      dispatch,
                     })}
                   </td>
                 );
@@ -101,7 +102,7 @@ const BaseTable = ({
           );
         })}
       </tbody>
-      <pre>
+      {/* <pre>
         <code>
           {JSON.stringify(
             { selectedRows: selectedFlatRows.map((row) => row.original) },
@@ -109,7 +110,7 @@ const BaseTable = ({
             2
           )}
         </code>
-      </pre>
+      </pre> */}
     </table>
   );
 };

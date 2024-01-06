@@ -1,7 +1,24 @@
-import { memo } from "react";
+import { memo, useCallback } from "react";
 import upload_svg from "../assets/upload-solid.svg";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchFilesData, handleFileUpload } from "../redux/actionCreators";
 
-const Sidebar = ({ handleFileChange, handleLogout, file }) => {
+const Sidebar = ({ handleLogout }) => {
+  const dispatch = useDispatch();
+
+  const { fileToBeUploaded, fileUploading, forceUpload, error } = useSelector(
+    (state) => state.fileUpload
+  );
+
+  const handleFileChange = useCallback(
+    (e) => {
+      if (!e.target.files?.length) return;
+      const inputFile = e.target.files[0];
+      dispatch(handleFileUpload(inputFile, false));
+    },
+    [dispatch]
+  );
+
   return (
     <div className="sidebar">
       <div className="logoContainer">
@@ -25,9 +42,28 @@ const Sidebar = ({ handleFileChange, handleLogout, file }) => {
             />
           </div>
         </label>
-        <div className="feature">
+        <div
+          className="feature"
+          onClick={() => {
+            dispatch({ type: "CURRENT_PAGE_UPDATE", payload: 1 });
+            dispatch({ type: "MARKED_DELETED_UPDATE", payload: false });
+            dispatch(fetchFilesData());
+          }}
+        >
           <div className="" style={{ paddingLeft: "1rem" }}>
-            Add new tag
+            DashBoard
+          </div>
+        </div>
+        <div
+          className="feature"
+          onClick={() => {
+            dispatch({ type: "CURRENT_PAGE_UPDATE", payload: 1 });
+            dispatch({ type: "MARKED_DELETED_UPDATE", payload: true });
+            dispatch(fetchFilesData());
+          }}
+        >
+          <div className="" style={{ paddingLeft: "1rem" }}>
+            Trash
           </div>
         </div>
         <div className="feature">

@@ -5,6 +5,7 @@ export const MIMETYPES = {
   MPEG: "audio/mpeg",
   PDF: "application/pdf",
   MP4: "video/mp4",
+  CSV: "text/csv",
 };
 
 export const MIMETYPE_VS_DISPLAYTEXT = {
@@ -14,5 +15,6 @@ export const MIMETYPE_VS_DISPLAYTEXT = {
   [MIMETYPES.MPEG]: "MP3",
   [MIMETYPES.PDF]: "PDF",
   [MIMETYPES.MP4]: "MP4",
+  [MIMETYPES.CSV]: "CSV",
   DEFAULT: "FILE",
 };

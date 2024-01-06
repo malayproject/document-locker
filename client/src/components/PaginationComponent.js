@@ -1,32 +1,45 @@
 import { useMemo, useCallback } from "react";
-const PaginationComponent = ({
-  currentPage,
-  rowsPerPage,
-  setCurrentPage,
-  setRowsPerPage,
-  totalFileCount,
-}) => {
-  const handleChange = (e) => {
-    console.log(e);
-    setRowsPerPage(Number.parseInt(e.target.value));
-    setCurrentPage(1);
-  };
+import { useDispatch, useSelector } from "react-redux";
+const PaginationComponent = () => {
+  const dispatch = useDispatch();
+
+  const { currentPage, rowsPerPage, totalFileCount } = useSelector(
+    (state) => state.tableData
+  );
+
+  const handleChange = useCallback(
+    (e) => {
+      console.log(e);
+      dispatch({
+        type: "ROWS_PER_PAGE_UPDATE",
+        payload: Number.parseInt(e.target.value),
+      });
+      dispatch({ type: "CURRENT_PAGE_UPDATE", payload: 1 });
+    },
+    [dispatch]
+  );
+
   const totalPages = useMemo(
     () => Math.ceil(totalFileCount / rowsPerPage),
     [totalFileCount, rowsPerPage]
   );
   const getPagesJsx = () => {
     const totalPages = Math.ceil(totalFileCount / rowsPerPage);
-    let i = 1;
-    const jsx = [];
-    while (i <= totalPages) {
-      jsx.push(i);
+    let i = totalPages < 5 || currentPage < 3 ? 1 : currentPage - 2;
+    const pages = [];
+    while (
+      i <=
+      (totalPages < 5 || currentPage > totalPages - 2
+        ? totalPages
+        : currentPage + 2)
+    ) {
+      pages.push(i);
       i++;
     }
-    return jsx.map((page) => (
+    return pages.map((page) => (
       <div
         key={page * page}
-        onClick={() => setCurrentPage(page)}
+        onClick={() => dispatch({ type: "CURRENT_PAGE_UPDATE", payload: page })}
         style={{
           cursor: "pointer",
           fontWeight: page === currentPage ? 700 : 100,
@@ -52,6 +65,7 @@ const PaginationComponent = ({
             marginLeft: "0.5rem",
           }}
         >
+          <option value={5}>5</option>
           <option value={10}>10</option>
           <option value={20}>20</option>
           <option value={50}>50</option>
@@ -70,10 +84,12 @@ const PaginationComponent = ({
               border: "none",
               borderRadius: "0.3rem",
             }}
-            onClick={() => setCurrentPage(currentPage - 1)}
+            onClick={() =>
+              dispatch({ type: "CURRENT_PAGE_UPDATE", payload: 1 })
+            }
             disabled={currentPage === 1}
           >
-            Previous
+            <strong>{"<<"}</strong>
           </button>
           <button
             style={{
@@ -82,10 +98,15 @@ const PaginationComponent = ({
               border: "none",
               borderRadius: "0.3rem",
             }}
-            onClick={() => setCurrentPage(1)}
+            onClick={() =>
+              dispatch({
+                type: "CURRENT_PAGE_UPDATE",
+                payload: currentPage - 1,
+              })
+            }
             disabled={currentPage === 1}
           >
-            <strong>{"<<"}</strong>
+            Previous
           </button>
           <div className="pages">{getPagesJsx()}</div>
           <button
@@ -95,10 +116,15 @@ const PaginationComponent = ({
               border: "none",
               borderRadius: "0.3rem",
             }}
-            onClick={() => setCurrentPage(totalPages)}
+            onClick={() =>
+              dispatch({
+                type: "CURRENT_PAGE_UPDATE",
+                payload: currentPage + 1,
+              })
+            }
             disabled={currentPage === totalPages}
           >
-            <strong>{">>"}</strong>
+            Next
           </button>
           <button
             style={{
@@ -107,10 +133,12 @@ const PaginationComponent = ({
               border: "none",
               borderRadius: "0.3rem",
             }}
-            onClick={() => setCurrentPage(currentPage + 1)}
+            onClick={() =>
+              dispatch({ type: "CURRENT_PAGE_UPDATE", payload: totalPages })
+            }
             disabled={currentPage === totalPages}
           >
-            Next
+            <strong>{">>"}</strong>
           </button>
         </div>
       </div>

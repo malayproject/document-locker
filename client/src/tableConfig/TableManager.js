@@ -2,70 +2,38 @@ import React, { memo, useState, useEffect } from "react";
 import axios from "axios";
 import BaseTable from "./BaseTable";
 import PaginationComponent from "../components/PaginationComponent";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchFilesData } from "../redux/actionCreators";
 
 const TableManager = ({
   uploadSuccessful,
-  setShowFileInfoModal,
-  setSelectedFileInfo,
-  setShowFileSoftDeleteConfModal,
   setIsFileUpdating,
   isFileUpdating,
 }) => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [filesData, setFilesData] = useState([]);
-  const [totalFileCount, setTotalFileCount] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
 
-  const fetchFilesData = async () => {
-    try {
-      setIsLoading(true);
-      const data = await axios.get(
-        `http://localhost:5100/api/files?page=${currentPage}&limit=${rowsPerPage}`
-      );
-      console.log("data 11", data.data.files, data.data.totalFileCount);
-      setFilesData(data.data?.files || []);
-      setTotalFileCount(data.data?.totalFileCount);
-      setIsLoading(false);
-    } catch (err) {
-      console.error(err.message);
-    }
-  };
+  const { currentPage, rowsPerPage, isFilesFetching } = useSelector(
+    (state) => state.tableData
+  );
 
   useEffect(() => {
-    if (uploadSuccessful) {
-      fetchFilesData();
-      setCurrentPage(1);
-    }
-  }, [uploadSuccessful]);
-
-  useEffect(() => {
-    fetchFilesData();
-  }, [currentPage, rowsPerPage]);
+    dispatch(fetchFilesData());
+  }, [currentPage, rowsPerPage, dispatch]);
 
   return (
     <div className="tableManager">
-      {isLoading ? (
+      {isFilesFetching ? (
         <div className="loadingtable">
           <h1>Loading...</h1>
         </div>
       ) : (
+        // <FilterComponent />
         <BaseTable
-          filesData={filesData}
-          setShowFileInfoModal={setShowFileInfoModal}
-          setSelectedFileInfo={setSelectedFileInfo}
-          setShowFileSoftDeleteConfModal={setShowFileSoftDeleteConfModal}
           setIsFileUpdating={setIsFileUpdating}
           isFileUpdating={isFileUpdating}
         />
       )}
-      <PaginationComponent
-        currentPage={currentPage}
-        rowsPerPage={rowsPerPage}
-        setCurrentPage={setCurrentPage}
-        setRowsPerPage={setRowsPerPage}
-        totalFileCount={totalFileCount}
-      />
+      <PaginationComponent />
     </div>
   );
 };

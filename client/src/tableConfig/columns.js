@@ -1,6 +1,10 @@
 import { format } from "date-fns";
 import ColumnFilter from "../components/ColumnFilter";
 import eraseSvg from "../assets/erase.svg";
+import disabledEraseSvg from "../assets/disabledErase.svg";
+import undoTrashSvg from "../assets/undo-trash.svg";
+import axios from "axios";
+import { fetchFilesData } from "../redux/actionCreators";
 
 const COLUMNS = [
   {
@@ -74,27 +78,58 @@ const COLUMNS = [
     width: 30,
     Cell: (props) => {
       console.log(props);
-      const { setShowFileSoftDeleteConfModal, setSelectedFileInfo, row } =
-        props;
+      const { dispatch, row } = props;
       return (
         <>
-          <div
+          <button
             className="deleteIcon"
             style={{
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
+              border: "none",
+              cursor: "pointer",
+              width: "100%",
+              height: "100%",
+              backgroundColor: "transparent",
             }}
-            onClick={(e) => {
-              console.log("86", e);
-              setSelectedFileInfo(row?.original);
-              setShowFileSoftDeleteConfModal(true);
-
+            onClick={async (e) => {
               e.stopPropagation();
+              console.log("86", e);
+              if (row.original && !row.original.markedDeleted) {
+                dispatch({ type: "SELECT_FILE", payload: row?.original });
+                dispatch({
+                  type: "FILE_SOFT_DELETE_CONFIRMATION_MODAL",
+                  payload: true,
+                });
+              }
+              if (row.original && row.original.markedDeleted) {
+                dispatch({
+                  type: "FILE_UPDATE_PENDING",
+                  payload: row?.original,
+                });
+                try {
+                  const res = await axios.delete(
+                    `http://localhost:5100/api/file/${row.original._id}?restore=true`
+                  );
+                  dispatch({ type: "FILE_UPDATE_FULFILLED" });
+                  dispatch(fetchFilesData());
+                } catch (err) {
+                  dispatch({
+                    type: "FILE_UPDATE_REJECTED",
+                    payload: err.message,
+                  });
+                  console.log(err.message);
+                }
+              }
             }}
           >
-            <img src={eraseSvg} alt="delete" />
-          </div>
+            <img
+              src={row?.original?.markedDeleted ? undoTrashSvg : eraseSvg}
+              alt="delete"
+              disabled
+            />
+          </button>
         </>
       );
     },

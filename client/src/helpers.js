@@ -13,7 +13,7 @@ export const getAbsoluteUrl = (relPath) => {
 };
 
 export const getFileText = (mimeType) => {
-  let fileText = MIMETYPE_VS_DISPLAYTEXT.DEFAULT;
+  let fileText = null;
   switch (mimeType) {
     case MIMETYPES.PNG:
       fileText = MIMETYPE_VS_DISPLAYTEXT[MIMETYPES.PNG];
@@ -30,8 +30,11 @@ export const getFileText = (mimeType) => {
     case MIMETYPES.MP4:
       fileText = MIMETYPE_VS_DISPLAYTEXT[MIMETYPES.MP4];
       break;
+    case MIMETYPES.CSV:
+      fileText = MIMETYPE_VS_DISPLAYTEXT[MIMETYPES.CSV];
+      break;
     default:
-      return;
+      fileText = MIMETYPE_VS_DISPLAYTEXT.DEFAULT;
   }
   return fileText;
 };

@@ -1,19 +1,18 @@
 import { memo, useCallback } from "react";
-const FileUploadConfirmationModal = ({
-  setShowConfirmationModal,
-  setFile,
-  setForceUpload,
-}) => {
+import { useDispatch } from "react-redux";
+import { handleFileUpload } from "../redux/actionCreators";
+
+const FileUploadConfirmationModal = () => {
+  const dispatch = useDispatch();
+
   const handleCancel = useCallback(() => {
-    setShowConfirmationModal(false);
-    // setFile({ uploadStatus: "cancelled" });
-    setFile(null);
-  }, [setFile, setShowConfirmationModal]);
+    dispatch({ type: "UPLOAD_CONFIRMATION_MODAL", payload: false });
+  }, [dispatch]);
 
   const handleContinue = useCallback(() => {
-    setForceUpload(true);
-    setShowConfirmationModal(false);
-  }, [setForceUpload, setShowConfirmationModal]);
+    dispatch(handleFileUpload(null, true));
+    dispatch({ type: "UPLOAD_CONFIRMATION_MODAL", payload: false });
+  }, [dispatch]);
   return (
     <div className="confirmationmodal">
       <div className="confirmationText">

@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState, memo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { getUser } from "../helpers";
+import { useDispatch, useSelector } from "react-redux";
 import img from "../assets/google-logo.png";
 import Sidebar from "../components/Sidebar";
 import FileUploadConfirmationModal from "../components/FileUploadConfirmationModal";
@@ -14,17 +15,17 @@ import FileSoftDeleteConfirmationModal from "../components/FileSoftDeleteConfirm
 
 const Home = (props) => {
   const navigate = useNavigate();
-  const [file, setFile] = useState(null);
-  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-  const [forceUpload, setForceUpload] = useState(false);
+
+  const {
+    showFileInfoModal,
+    showUploadStatusModal,
+    showUploadConfirmationModal,
+    showFileSoftDeleteConfirmationModal,
+  } = useSelector((state) => state.showModals);
   const [uploadSuccessful, setUploadSuccessful] = useState(false);
-  const [showFileUploadStatusModal, setShowFileUploadStatusModal] =
-    useState(false);
-  const [showFileInfoModal, setShowFileInfoModal] = useState(false);
-  const [selectedFileInfo, setSelectedFileInfo] = useState(null);
-  const [showFileSoftDeleteConfModal, setShowFileSoftDeleteConfModal] =
-    useState(false);
   const [isFileUpdating, setIsFileUpdating] = useState(false);
+
+  const dispatch = useDispatch();
 
   const handleLogout = async (e) => {
     try {
@@ -47,91 +48,24 @@ const Home = (props) => {
     })();
   }, [navigate]);
 
-  const handleFileChange = useCallback(
-    (e) => {
-      debugger;
-      if (!e.target.files?.length) return;
-      const inputFile = e.target.files[0];
-      setFile(inputFile);
-    },
-    [setFile]
-  );
-
-  console.log("file 36", file);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        setUploadSuccessful(false);
-        const formData = new FormData();
-        console.log(img);
-        if (file) {
-          formData.append("image", file);
-          const serverRes = await axios.post(
-            `http://localhost:5100/api/uploadFile?forceUpload=${forceUpload}`,
-            formData,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            }
-          );
-          console.log("serverRes.data", serverRes.data);
-          setFile(null);
-          setForceUpload(false);
-          setShowFileUploadStatusModal(true);
-        }
-      } catch (err) {
-        console.log(err);
-        if (err.response?.data?.code === 3006) {
-          debugger;
-          setForceUpload(false);
-          setShowConfirmationModal(true);
-        }
-      }
-    })();
-  }, [file, forceUpload]);
+  // console.log("file 36", file);
 
   return (
     <div className="home">
-      <Sidebar
-        handleFileChange={handleFileChange}
-        handleLogout={handleLogout}
-        file={file}
-      />
+      <Sidebar handleLogout={handleLogout} />
       <TableManager
-        uploadSuccessful={uploadSuccessful}
-        setShowFileInfoModal={setShowFileInfoModal}
-        setSelectedFileInfo={setSelectedFileInfo}
-        setShowFileSoftDeleteConfModal={setShowFileSoftDeleteConfModal}
         setIsFileUpdating={setIsFileUpdating}
         isFileUpdating={isFileUpdating}
       />
       {/* <BaseTable uploadSuccessful={uploadSuccessful} /> */}
-      {showConfirmationModal && (
-        <FileUploadConfirmationModal
-          setShowConfirmationModal={setShowConfirmationModal}
-          setFile={setFile}
-          setForceUpload={setForceUpload}
-        />
-      )}
-      {showFileUploadStatusModal && (
-        <FileUploadStatusModal
-          setShowFileUploadStatusModal={setShowFileUploadStatusModal}
-          setUploadSuccessful={setUploadSuccessful}
-        />
-      )}
-      {showFileInfoModal && (
-        <FileInfoModal
-          setShowFileInfoModal={setShowFileInfoModal}
-          selectedFileInfo={selectedFileInfo}
-        />
-      )}
-      {showFileSoftDeleteConfModal && (
+      {showUploadConfirmationModal && <FileUploadConfirmationModal />}
+      {showUploadStatusModal && <FileUploadStatusModal />}
+      {showFileInfoModal && <FileInfoModal />}
+      {showFileSoftDeleteConfirmationModal && (
         <FileSoftDeleteConfirmationModal
-          setShowFileSoftDeleteConfModal={setShowFileSoftDeleteConfModal}
+          // setShowFileSoftDeleteConfModal={setShowFileSoftDeleteConfModal}
           isFileUpdating={isFileUpdating}
-          selectedFileInfo={selectedFileInfo}
+          // selectedFileInfo={selectedFileInfo}
         />
       )}
     </div>
