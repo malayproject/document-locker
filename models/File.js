@@ -10,6 +10,7 @@ const fileSchema = new Schema({
   modifiedAt: Date,
   userId: String,
   markedDeleted: Boolean,
+  tagIds: Array,
 });
 
 mongoose.model("files", fileSchema);

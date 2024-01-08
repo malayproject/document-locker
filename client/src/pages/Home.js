@@ -12,6 +12,7 @@ import FileUploadStatusModal from "../components/FileUploadStatusModal";
 import TableManager from "../tableConfig/TableManager.js";
 import FileInfoModal from "../components/FileInfoModal.js";
 import FileSoftDeleteConfirmationModal from "../components/FileSoftDeleteConfirmationModal.js";
+import { fetchTagsData } from "../redux/actionCreators.js";
 
 const Home = (props) => {
   const navigate = useNavigate();
@@ -47,6 +48,10 @@ const Home = (props) => {
       }
     })();
   }, [navigate]);
+
+  useEffect(() => {
+    dispatch(fetchTagsData());
+  }, [dispatch]);
 
   // console.log("file 36", file);
 

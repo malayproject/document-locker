@@ -14,7 +14,10 @@ module.exports = (app) => {
       console.log("req.body 11", req.body);
       const tagName = req.body.tagName;
       if (!tagName) throw new Error("Empty tag name received");
-      const existingTag = await TagModel.findOne({ tagName: tagName }).exec();
+      const existingTag = await TagModel.findOne({
+        tagName: tagName,
+        userId: req.user?.id,
+      }).exec();
       if (existingTag) throw new Error(`'${existingTag}' already exists`);
       const dateTime = Date.now();
       await new TagModel({
@@ -33,18 +36,18 @@ module.exports = (app) => {
     }
   });
 
-  app.get("/api/tag", corsMiddleware, async (req, res) => {
+  app.get("/api/tags", corsMiddleware, async (req, res) => {
     const userId = req.user?.id;
     try {
       const tags = await TagModel.find(
         {
           userId: userId,
         },
-        { tagName: true, _id: false }
+        { tagName: true }
       ).exec();
       res.status(200).json({ tags: tags });
     } catch (err) {
-      res.status(500).json({ message: err.message });
+      res.status(400).json({ message: err.message });
     }
   });
 };

@@ -62,6 +62,22 @@ export const fetchFilesData = () => {
   };
 };
 
+export const fetchTagsData = () => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch({ type: "USER_TAGS_LOADING_PENDING" });
+      const data = await axios.get("http://localhost:5100/api/tags");
+      dispatch({
+        type: "USER_TAGS_LOADING_FULFILLED",
+        payload: data.data.tags,
+      });
+    } catch (err) {
+      console.error(err.message);
+      dispatch({ type: "USER_TAGS_LOADING_REJECTED", error: err.message });
+    }
+  };
+};
+
 // export const deleteFile = (e) => {
 
 //     console.log("86", e);

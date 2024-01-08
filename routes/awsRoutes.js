@@ -68,6 +68,7 @@ module.exports = (app) => {
           modifiedAt: dateTime,
           userId: req.user?.id,
           markedDeleted: false,
+          tagIds: [],
         }).save();
         console.log("file uploaded in mongo");
         res.status(200).json({ message: "uploaded to S3 and mongo" });

@@ -1,10 +1,19 @@
 import { memo, useCallback } from "react";
 import upload_svg from "../assets/upload-solid.svg";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchFilesData, handleFileUpload } from "../redux/actionCreators";
+import {
+  fetchFilesData,
+  fetchTagsData,
+  handleFileUpload,
+} from "../redux/actionCreators";
 
 const Sidebar = ({ handleLogout }) => {
   const dispatch = useDispatch();
+
+  const userTags = useSelector((state) => state.userTagsData.userTags);
+  const userTagsFeatureExpanded = useSelector(
+    (state) => state.sidebar.userTagsFeatureExpanded
+  );
 
   const { fileToBeUploaded, fileUploading, forceUpload, error } = useSelector(
     (state) => state.fileUpload
@@ -66,10 +75,26 @@ const Sidebar = ({ handleLogout }) => {
             Trash
           </div>
         </div>
-        <div className="feature">
+        <div
+          className="feature tagFeature"
+          onClick={(e) => {
+            e.stopPropagation();
+            if (!userTagsFeatureExpanded) dispatch(fetchTagsData());
+
+            dispatch({ type: "USER_TAGS_EXPAND" });
+          }}
+        >
           <div className="" style={{ paddingLeft: "1rem" }}>
-            sdfdf
+            User Tags
           </div>
+        </div>
+        <div
+          className={`tagsContainer${userTagsFeatureExpanded ? "" : " hidden"}`}
+        >
+          <span className="createATag">Create a tag</span>
+          {userTags.map((userTag) => {
+            return <span key={userTag._id}>{userTag.tagName}</span>;
+          })}
         </div>
       </div>
     </div>

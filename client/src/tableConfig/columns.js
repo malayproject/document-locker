@@ -1,6 +1,7 @@
 import { format } from "date-fns";
 import ColumnFilter from "../components/ColumnFilter";
 import eraseSvg from "../assets/erase.svg";
+import addATag from "../assets/add-a-tag.png";
 import disabledEraseSvg from "../assets/disabledErase.svg";
 import undoTrashSvg from "../assets/undo-trash.svg";
 import axios from "axios";
@@ -80,7 +81,28 @@ const COLUMNS = [
       console.log(props);
       const { dispatch, row } = props;
       return (
-        <>
+        <div
+          className="actionsCell"
+          style={{ display: "flex", justifyContent: "space-around" }}
+          onClick={(e) => console.log("eqr actionsCell")}
+        >
+          <button
+            className="addTagIcon"
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              border: "none",
+              cursor: "pointer",
+              backgroundColor: "transparent",
+            }}
+            onClick={(e) => {
+              e.stopPropagation();
+              console.log("eqr", e);
+            }}
+          >
+            <img src={addATag} alt="delete" width="20px" height="auto" />
+          </button>
           <button
             className="deleteIcon"
             style={{
@@ -89,13 +111,12 @@ const COLUMNS = [
               alignItems: "center",
               border: "none",
               cursor: "pointer",
-              width: "100%",
+              width: "30%",
               height: "100%",
               backgroundColor: "transparent",
             }}
             onClick={async (e) => {
               e.stopPropagation();
-              console.log("86", e);
               if (row.original && !row.original.markedDeleted) {
                 dispatch({ type: "SELECT_FILE", payload: row?.original });
                 dispatch({
@@ -127,10 +148,11 @@ const COLUMNS = [
             <img
               src={row?.original?.markedDeleted ? undoTrashSvg : eraseSvg}
               alt="delete"
-              disabled
+              width="20px"
+              height="auto"
             />
           </button>
-        </>
+        </div>
       );
     },
   },

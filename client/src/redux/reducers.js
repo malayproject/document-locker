@@ -9,6 +9,15 @@ const initialTableDataState = {
   rowsPerPage: 5,
 };
 
+const initialUserTagsState = {
+  userTags: [],
+  isUserTagsFetching: false,
+};
+
+const initialSidebarState = {
+  userTagsFeatureExpanded: false,
+};
+
 const initialSelectFileState = {
   selectedFile: null,
 };
@@ -46,6 +55,19 @@ const tableDataReducer = (state = initialTableDataState, action) => {
       return { ...state, rowsPerPage: action.payload };
     case "MARKED_DELETED_UPDATE":
       return { ...state, markedDeleted: action.payload };
+    default:
+      return state;
+  }
+};
+
+const userTagsReducer = (state = initialUserTagsState, action) => {
+  switch (action.type) {
+    case "USER_TAGS_LOADING_PENDING":
+      return { ...state, isUserTagsFetching: true, error: null };
+    case "USER_TAGS_LOADING_FULFILLED":
+      return { ...state, isUserTagsFetching: false, userTags: action.payload };
+    case "USER_TAGS_LOADING_REJECTED":
+      return { ...state, isUserTagsFetching: false, error: action.error };
     default:
       return state;
   }
@@ -122,11 +144,27 @@ const modalsReducer = (state = initalModalsState, action) => {
   }
 };
 
+const sidebarReducer = (state = initialSidebarState, action) => {
+  switch (action.type) {
+    case "USER_TAGS_EXPAND":
+      return {
+        ...state,
+        userTagsFeatureExpanded: !state.userTagsFeatureExpanded,
+      };
+    // case "USER_TAGS_COLLAPSE":
+    //   return { ...state, userTagsFeatureExpanded: false };
+    default:
+      return state;
+  }
+};
+
 const rootReducer = combineReducers({
   tableData: tableDataReducer,
   selectFile: selectFileReducer,
   showModals: modalsReducer,
   fileUpload: fileUploadReducer,
+  userTagsData: userTagsReducer,
+  sidebar: sidebarReducer,
 });
 
 export default rootReducer;
