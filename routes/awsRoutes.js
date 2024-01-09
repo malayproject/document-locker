@@ -80,11 +80,22 @@ module.exports = (app) => {
   );
 
   app.get("/api/files", corsMiddleware, async (req, res) => {
-    const { page, limit, markedDeleted } = req.query;
+    const { page, limit, markedDeleted, typeFilter, mimeTypes } = req.query;
+    const mimeTypeQueryObj = (() => {
+      switch (typeFilter) {
+        case "TYPE":
+          return { $not: { $in: [] } };
+        case "OTHERS":
+          return { $not: { $in: [...mimeTypes.split(",")] } };
+        default:
+          return { $in: [...mimeTypes.split(",")] };
+      }
+    })();
     try {
       const filesRes = await FileModel.find({
         userId: req.user?.id,
         markedDeleted: markedDeleted,
+        mimeType: mimeTypeQueryObj,
       })
         .sort({ createdAt: -1 })
         .limit(limit)
@@ -94,6 +105,7 @@ module.exports = (app) => {
       const count = await FileModel.countDocuments({
         userId: req.user?.id,
         markedDeleted: markedDeleted,
+        mimeType: mimeTypeQueryObj,
       }).exec();
 
       console.log("all files 84", filesRes);

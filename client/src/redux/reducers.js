@@ -1,4 +1,5 @@
 import { combineReducers } from "redux";
+import { TYPEFILTER } from "../constants";
 
 const initialTableDataState = {
   files: [],
@@ -11,7 +12,13 @@ const initialTableDataState = {
 
 const initialUserTagsState = {
   userTags: [],
+  selectedTagIds: [],
   isUserTagsFetching: false,
+};
+
+const initialFiltersState = {
+  typeFilter: TYPEFILTER.TYPE,
+  typeFilterMenuExpanded: false,
 };
 
 const initialSidebarState = {
@@ -68,6 +75,19 @@ const userTagsReducer = (state = initialUserTagsState, action) => {
       return { ...state, isUserTagsFetching: false, userTags: action.payload };
     case "USER_TAGS_LOADING_REJECTED":
       return { ...state, isUserTagsFetching: false, error: action.error };
+    case "USER_SELECTED_TAG_ADD":
+      if (state.selectedTagIds.includes(action.payload)) return state;
+      return {
+        ...state,
+        selectedTagIds: [...state.selectedTagIds, action.payload],
+      };
+    case "USER_SELECTED_TAG_REMOVE":
+      if (state.selectedTagIds.includes(action.payload))
+        return {
+          ...state,
+          selectedTagIds: [...state.selectedTagIds, action.payload],
+        };
+      return state;
     default:
       return state;
   }
@@ -158,6 +178,27 @@ const sidebarReducer = (state = initialSidebarState, action) => {
   }
 };
 
+const filtersReducer = (state = initialFiltersState, action) => {
+  switch (action.type) {
+    case "SET_TYPE_FILTER":
+      return { ...state, typeFilter: action.payload };
+    case "RESET_TYPE_FILTER":
+      return {
+        ...state,
+        typeFilter: TYPEFILTER.TYPE,
+        typeFilterMenuExpanded: false,
+      };
+    case "TOGGLE_TYPE_FILTER_MENU":
+      return {
+        ...state,
+        typeFilterMenuExpanded: !state.typeFilterMenuExpanded,
+      };
+
+    default:
+      return state;
+  }
+};
+
 const rootReducer = combineReducers({
   tableData: tableDataReducer,
   selectFile: selectFileReducer,
@@ -165,6 +206,7 @@ const rootReducer = combineReducers({
   fileUpload: fileUploadReducer,
   userTagsData: userTagsReducer,
   sidebar: sidebarReducer,
+  filters: filtersReducer,
 });
 
 export default rootReducer;

@@ -8,6 +8,10 @@ const BaseTable = ({ setIsFileUpdating, isFileUpdating }) => {
   const dispatch = useDispatch();
 
   const selectedFile = useSelector((state) => state.selectFile.selectedFile);
+  const isFilesFetching = useSelector(
+    (state) => state.tableData.isFilesFetching
+  );
+  console.log("isFilesFetching 14", isFilesFetching);
 
   const { showFileInfoModal, showFileSoftDeleteConfirmationModal } =
     useSelector((state) => state.showModals);
@@ -74,10 +78,15 @@ const BaseTable = ({ setIsFileUpdating, isFileUpdating }) => {
           </tr>
         ))}
       </thead>
+      {/* {isFilesFetching ? (
+        <div className="loadingtable">
+          <h1>Loading...</h1>
+        </div> */}
+      {/* ) : ( */}
       <tbody
-        {
-          ...getTableBodyProps(/*{ style: { height: 700, overflow: "auto" } }*/)
-        }
+        {...getTableBodyProps(
+          isFilesFetching ? { style: { filter: "blur(3px)" } } : {}
+        )}
       >
         {rows.map((row) => {
           prepareRow(row);
@@ -101,7 +110,14 @@ const BaseTable = ({ setIsFileUpdating, isFileUpdating }) => {
             </tr>
           );
         })}
+        {/* <tr>
+            {rows[0].cells.map((cell) => (
+              <td></td>
+            ))}
+            {console.log("row one", rows[0])}
+          </tr> */}
       </tbody>
+      {/* )} */}
       {/* <pre>
         <code>
           {JSON.stringify(

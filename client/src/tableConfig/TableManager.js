@@ -1,9 +1,9 @@
-import React, { memo, useState, useEffect } from "react";
-import axios from "axios";
+import React, { memo, useEffect } from "react";
 import BaseTable from "./BaseTable";
 import PaginationComponent from "../components/PaginationComponent";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchFilesData } from "../redux/actionCreators";
+import FilterComponent from "../components/FilterConponent";
 
 const TableManager = ({
   uploadSuccessful,
@@ -22,17 +22,14 @@ const TableManager = ({
 
   return (
     <div className="tableManager">
-      {isFilesFetching ? (
-        <div className="loadingtable">
-          <h1>Loading...</h1>
-        </div>
-      ) : (
-        // <FilterComponent />
+      <FilterComponent />
+      <div style={{ overflowY: "scroll", height: "89vh" }}>
         <BaseTable
           setIsFileUpdating={setIsFileUpdating}
           isFileUpdating={isFileUpdating}
         />
-      )}
+      </div>
+
       <PaginationComponent />
     </div>
   );

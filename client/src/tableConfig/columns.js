@@ -54,7 +54,7 @@ const COLUMNS = [
     Filter: ColumnFilter,
     Footer: "Size",
     accessor: "fileSize",
-    width: 180,
+    width: 150,
     Cell: ({ value }) => {
       const kBs = (value / 1024).toFixed(2);
       return `${kBs} kB`;
@@ -65,7 +65,7 @@ const COLUMNS = [
     Filter: ColumnFilter,
     Footer: "Date",
     accessor: "createdAt",
-    width: 220,
+    width: 150,
     Cell: (props) => {
       console.log("cell props 65", props.testing);
       //   console.log("29 Cell props", props.row.id);

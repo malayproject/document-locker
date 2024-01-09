@@ -93,7 +93,11 @@ const Sidebar = ({ handleLogout }) => {
         >
           <span className="createATag">Create a tag</span>
           {userTags.map((userTag) => {
-            return <span key={userTag._id}>{userTag.tagName}</span>;
+            return (
+              <span className="tags" key={userTag._id}>
+                {userTag.tagName}
+              </span>
+            );
           })}
         </div>
       </div>

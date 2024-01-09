@@ -1,4 +1,5 @@
 import axios from "axios";
+import { TYPEFILTER_VS_MIMETYPES_MAP } from "../constants";
 
 export const handleFileUpload = (file, forceUpload) => {
   if (!file && !forceUpload) return {};
@@ -41,10 +42,13 @@ export const handleFileUpload = (file, forceUpload) => {
 export const fetchFilesData = () => {
   return async (dispatch, getState) => {
     const { currentPage, rowsPerPage, markedDeleted } = getState().tableData;
+    const { typeFilter } = getState().filters;
+    const mimeTypes = TYPEFILTER_VS_MIMETYPES_MAP[typeFilter];
+    const mimeTypesString = mimeTypes.toString();
     try {
       dispatch({ type: "FILES_LOADING_PENDING" });
       const data = await axios.get(
-        `http://localhost:5100/api/files?page=${currentPage}&limit=${rowsPerPage}&markedDeleted=${markedDeleted}`
+        `http://localhost:5100/api/files?page=${currentPage}&limit=${rowsPerPage}&markedDeleted=${markedDeleted}&typeFilter=${typeFilter}&mimeTypes=${mimeTypesString}`
       );
       dispatch({
         type: "FILES_LOADING_FULFILLED",
@@ -77,12 +81,3 @@ export const fetchTagsData = () => {
     }
   };
 };
-
-// export const deleteFile = (e) => {
-
-//     console.log("86", e);
-//     setSelectedFileInfo(row?.original);
-//     setShowFileSoftDeleteConfModal(true);
-
-//     e.stopPropagation();
-//   }
