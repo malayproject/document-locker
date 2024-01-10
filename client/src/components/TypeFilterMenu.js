@@ -20,6 +20,7 @@ const TypeFilterMenu = () => {
             payload: TYPEFILTER.PDFS,
           });
           dispatch({ type: "CURRENT_PAGE_UPDATE", payload: 1 });
+          dispatch({ type: "TOGGLE_TYPE_FILTER_MENU" });
           dispatch(fetchFilesData());
         }}
       >
@@ -44,6 +45,7 @@ const TypeFilterMenu = () => {
             payload: TYPEFILTER.SPREADSHEETS,
           });
           dispatch({ type: "CURRENT_PAGE_UPDATE", payload: 1 });
+          dispatch({ type: "TOGGLE_TYPE_FILTER_MENU" });
           dispatch(fetchFilesData());
         }}
       >
@@ -68,6 +70,7 @@ const TypeFilterMenu = () => {
             payload: TYPEFILTER.IMAGES,
           });
           dispatch({ type: "CURRENT_PAGE_UPDATE", payload: 1 });
+          dispatch({ type: "TOGGLE_TYPE_FILTER_MENU" });
           dispatch(fetchFilesData());
         }}
       >
@@ -92,6 +95,7 @@ const TypeFilterMenu = () => {
             payload: TYPEFILTER.VIDEOS,
           });
           dispatch({ type: "CURRENT_PAGE_UPDATE", payload: 1 });
+          dispatch({ type: "TOGGLE_TYPE_FILTER_MENU" });
           dispatch(fetchFilesData());
         }}
       >
@@ -116,6 +120,7 @@ const TypeFilterMenu = () => {
             payload: TYPEFILTER.AUDIOS,
           });
           dispatch({ type: "CURRENT_PAGE_UPDATE", payload: 1 });
+          dispatch({ type: "TOGGLE_TYPE_FILTER_MENU" });
           dispatch(fetchFilesData());
         }}
       >
@@ -140,6 +145,7 @@ const TypeFilterMenu = () => {
             payload: TYPEFILTER.OTHERS,
           });
           dispatch({ type: "CURRENT_PAGE_UPDATE", payload: 1 });
+          dispatch({ type: "TOGGLE_TYPE_FILTER_MENU" });
           dispatch(fetchFilesData());
         }}
       >

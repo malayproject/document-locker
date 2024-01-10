@@ -3,7 +3,7 @@ import BaseTable from "./BaseTable";
 import PaginationComponent from "../components/PaginationComponent";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchFilesData } from "../redux/actionCreators";
-import FilterComponent from "../components/FilterConponent";
+import FilterComponent from "../components/FilterComponent";
 
 const TableManager = ({
   uploadSuccessful,

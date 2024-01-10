@@ -1,8 +1,10 @@
 import { memo, useCallback } from "react";
 import upload_svg from "../assets/upload-solid.svg";
 import { useSelector, useDispatch } from "react-redux";
+import _ from "lodash";
 import {
   fetchFilesData,
+  fetchFilesDataWithTagsFilter,
   fetchTagsData,
   handleFileUpload,
 } from "../redux/actionCreators";
@@ -27,6 +29,13 @@ const Sidebar = ({ handleLogout }) => {
     },
     [dispatch]
   );
+
+  const handleTagSelect = (e) => {
+    console.log("32 span", e.target.innerText);
+    const userTag = _.find(userTags, { tagName: e.target.innerText });
+    dispatch({ type: "USER_SELECTED_TAG_ADD", payload: userTag._id });
+    dispatch(fetchFilesData());
+  };
 
   return (
     <div className="sidebar">
@@ -76,6 +85,30 @@ const Sidebar = ({ handleLogout }) => {
           </div>
         </div>
         <div
+          className="feature"
+          onClick={() => {
+            dispatch({ type: "CURRENT_PAGE_UPDATE", payload: 1 });
+            dispatch({ type: "MARKED_DELETED_UPDATE", payload: false });
+            dispatch(fetchFilesData({ starred: true }));
+          }}
+        >
+          <div className="" style={{ paddingLeft: "1rem" }}>
+            Starred
+          </div>
+        </div>
+        <div
+          className="feature"
+          onClick={() => {
+            dispatch({ type: "CURRENT_PAGE_UPDATE", payload: 1 });
+            dispatch({ type: "MARKED_DELETED_UPDATE", payload: true });
+            dispatch(fetchFilesData());
+          }}
+        >
+          <div className="" style={{ paddingLeft: "1rem" }}>
+            Recent
+          </div>
+        </div>
+        <div
           className="feature tagFeature"
           onClick={(e) => {
             e.stopPropagation();
@@ -94,7 +127,11 @@ const Sidebar = ({ handleLogout }) => {
           <span className="createATag">Create a tag</span>
           {userTags.map((userTag) => {
             return (
-              <span className="tags" key={userTag._id}>
+              <span
+                className="tags"
+                key={userTag._id}
+                onClick={handleTagSelect}
+              >
                 {userTag.tagName}
               </span>
             );

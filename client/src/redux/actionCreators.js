@@ -39,16 +39,22 @@ export const handleFileUpload = (file, forceUpload) => {
   };
 };
 
-export const fetchFilesData = () => {
+export const fetchFilesData = (options) => {
+  const { starred } = options || {};
   return async (dispatch, getState) => {
     const { currentPage, rowsPerPage, markedDeleted } = getState().tableData;
-    const { typeFilter } = getState().filters;
+    const { typeFilter, searchFilterText, selectedTagIds } = getState().filters;
     const mimeTypes = TYPEFILTER_VS_MIMETYPES_MAP[typeFilter];
     const mimeTypesString = mimeTypes.toString();
+    const selectedTagIdsString = selectedTagIds.toString();
     try {
       dispatch({ type: "FILES_LOADING_PENDING" });
       const data = await axios.get(
-        `http://localhost:5100/api/files?page=${currentPage}&limit=${rowsPerPage}&markedDeleted=${markedDeleted}&typeFilter=${typeFilter}&mimeTypes=${mimeTypesString}`
+        `http://localhost:5100/api/files?page=${currentPage}&limit=${rowsPerPage}&markedDeleted=${markedDeleted}&searchFilterText=${searchFilterText}&typeFilter=${typeFilter}&mimeTypes=${mimeTypesString}${
+          starred ? "&starred=true" : ""
+        }${
+          selectedTagIdsString ? `&selectedTagIds=${selectedTagIdsString}` : ""
+        }`
       );
       dispatch({
         type: "FILES_LOADING_FULFILLED",
@@ -78,6 +84,30 @@ export const fetchTagsData = () => {
     } catch (err) {
       console.error(err.message);
       dispatch({ type: "USER_TAGS_LOADING_REJECTED", error: err.message });
+    }
+  };
+};
+
+export const handleFileFieldsUpdate = () => {
+  return async (dispatch, getState) => {
+    dispatch({ type: "SAVE_SELECTED_FILE" });
+    dispatch({
+      type: "FILE_UPDATE_PENDING",
+      payload: getState().selectFile.selectedFile,
+    });
+    try {
+      await axios.put(
+        `http://localhost:5100/api/file/${
+          getState().fileUpload.fileToBeUploaded._id
+        }`,
+        {
+          fileToBeUploaded: getState().fileUpload.fileToBeUploaded,
+        }
+      );
+      dispatch({ type: "FILE_UPDATE_FULFILLED" });
+      dispatch(fetchFilesData());
+    } catch (err) {
+      dispatch({ type: "FILE_UPDATE_REJECTED", error: err.message });
     }
   };
 };

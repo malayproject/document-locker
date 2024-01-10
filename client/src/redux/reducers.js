@@ -12,13 +12,14 @@ const initialTableDataState = {
 
 const initialUserTagsState = {
   userTags: [],
-  selectedTagIds: [],
   isUserTagsFetching: false,
 };
 
 const initialFiltersState = {
   typeFilter: TYPEFILTER.TYPE,
   typeFilterMenuExpanded: false,
+  searchFilterText: "",
+  selectedTagIds: [],
 };
 
 const initialSidebarState = {
@@ -27,6 +28,8 @@ const initialSidebarState = {
 
 const initialSelectFileState = {
   selectedFile: null,
+  modalTempSelectedFileTagIds: [],
+  // starred: false,
 };
 
 const initialFileUploadState = {
@@ -75,19 +78,6 @@ const userTagsReducer = (state = initialUserTagsState, action) => {
       return { ...state, isUserTagsFetching: false, userTags: action.payload };
     case "USER_TAGS_LOADING_REJECTED":
       return { ...state, isUserTagsFetching: false, error: action.error };
-    case "USER_SELECTED_TAG_ADD":
-      if (state.selectedTagIds.includes(action.payload)) return state;
-      return {
-        ...state,
-        selectedTagIds: [...state.selectedTagIds, action.payload],
-      };
-    case "USER_SELECTED_TAG_REMOVE":
-      if (state.selectedTagIds.includes(action.payload))
-        return {
-          ...state,
-          selectedTagIds: [...state.selectedTagIds, action.payload],
-        };
-      return state;
     default:
       return state;
   }
@@ -96,7 +86,55 @@ const userTagsReducer = (state = initialUserTagsState, action) => {
 const selectFileReducer = (state = initialSelectFileState, action) => {
   switch (action.type) {
     case "SELECT_FILE":
-      return { ...state, selectedFile: action.payload };
+      return {
+        ...state,
+        selectedFile: action.payload,
+        modalTempSelectedFileTagIds: action.payload.tagIds,
+        // starred: action.payload.starred,
+      };
+    case "ADD_MODAL_TEMP_TAGID":
+      if (state.modalTempSelectedFileTagIds.includes(action.payload))
+        return state;
+      return {
+        ...state,
+        modalTempSelectedFileTagIds: [
+          ...state.modalTempSelectedFileTagIds,
+          action.payload,
+        ],
+      };
+    case "TOGGLE_STAR_STATUS":
+      return {
+        ...state,
+        // starred: !state.starred,
+      };
+    case "SAVE_SELECTED_FILE":
+      return {
+        ...state,
+        selectedFile: {
+          ...state.selectedFile,
+          tagIds: [...state.modalTempSelectedFileTagIds],
+          // starred: state.starred,
+        },
+      };
+    case "REMOVE_MODAL_TEMP_TAGID":
+      if (state.modalTempSelectedFileTagIds.includes(action.payload))
+        return {
+          ...state,
+          modalTempSelectedFileTagIds: [
+            ...state.modalTempSelectedFileTagIds.filter(
+              (modalTempSelectedFileTagId) =>
+                modalTempSelectedFileTagId !== action.payload
+            ),
+          ],
+        };
+      return state;
+    case "UNSELECT_FILE":
+      return {
+        ...state,
+        selectedFile: null,
+        modalTempSelectedFileTagIds: [],
+        // starred: null,
+      };
     default:
       return state;
   }
@@ -193,7 +231,33 @@ const filtersReducer = (state = initialFiltersState, action) => {
         ...state,
         typeFilterMenuExpanded: !state.typeFilterMenuExpanded,
       };
-
+    case "SET_SEARCH_FILTER_TEXT":
+      return {
+        ...state,
+        searchFilterText: action.payload,
+      };
+    case "USER_SELECTED_TAG_ADD":
+      if (state.selectedTagIds.includes(action.payload)) return state;
+      return {
+        ...state,
+        selectedTagIds: [...state.selectedTagIds, action.payload],
+      };
+    case "USER_SELECTED_TAG_REMOVE":
+      if (state.selectedTagIds.includes(action.payload))
+        return {
+          ...state,
+          selectedTagIds: [
+            ...state.selectedTagIds.filter(
+              (selectedTagId) => selectedTagId !== action.payload
+            ),
+          ],
+        };
+      return state;
+    case "RESET_USER_SELECTED_TAGS":
+      return {
+        ...state,
+        selectedTagIds: [],
+      };
     default:
       return state;
   }

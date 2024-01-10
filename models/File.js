@@ -10,6 +10,7 @@ const fileSchema = new Schema({
   modifiedAt: Date,
   userId: String,
   markedDeleted: Boolean,
+  starred: Boolean,
   tagIds: Array,
 });
 

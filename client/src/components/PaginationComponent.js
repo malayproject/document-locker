@@ -52,17 +52,17 @@ const PaginationComponent = () => {
   return (
     <div className="paginationComponent">
       <div className="rowsPerPageContainer">
-        <label htmlFor="rowsPerPageSelect">Items per page: </label>
         <select
           id="rowsPerPageSelect"
           value={rowsPerPage}
           onChange={handleChange}
           style={{
-            width: "5rem",
+            width: "2.8rem",
             border: "none",
-            borderRadius: "0.3rem",
-            height: "1.6rem",
-            marginLeft: "0.5rem",
+            borderRadius: "0.5rem",
+            height: "1.2rem",
+            padding: "0 0.5rem",
+            fontWeight: 700,
           }}
         >
           <option value={5}>5</option>
@@ -70,6 +70,10 @@ const PaginationComponent = () => {
           <option value={20}>20</option>
           <option value={50}>50</option>
         </select>
+        <label htmlFor="rowsPerPageSelect" style={{ marginLeft: "0.5rem" }}>
+          {" "}
+          items per page
+        </label>
       </div>
       <div className="pageController">
         <div className="left">
@@ -82,7 +86,7 @@ const PaginationComponent = () => {
               width: "5rem",
               cursor: "pointer",
               border: "none",
-              borderRadius: "0.3rem",
+              borderRadius: "0.5rem",
             }}
             onClick={() =>
               dispatch({ type: "CURRENT_PAGE_UPDATE", payload: 1 })
@@ -96,7 +100,7 @@ const PaginationComponent = () => {
               width: "5rem",
               cursor: "pointer",
               border: "none",
-              borderRadius: "0.3rem",
+              borderRadius: "0.5rem",
             }}
             onClick={() =>
               dispatch({
@@ -114,7 +118,7 @@ const PaginationComponent = () => {
               width: "5rem",
               cursor: "pointer",
               border: "none",
-              borderRadius: "0.3rem",
+              borderRadius: "0.5rem",
             }}
             onClick={() =>
               dispatch({
@@ -131,7 +135,7 @@ const PaginationComponent = () => {
               width: "5rem",
               cursor: "pointer",
               border: "none",
-              borderRadius: "0.3rem",
+              borderRadius: "0.5rem",
             }}
             onClick={() =>
               dispatch({ type: "CURRENT_PAGE_UPDATE", payload: totalPages })

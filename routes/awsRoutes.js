@@ -68,6 +68,7 @@ module.exports = (app) => {
           modifiedAt: dateTime,
           userId: req.user?.id,
           markedDeleted: false,
+          starred: false,
           tagIds: [],
         }).save();
         console.log("file uploaded in mongo");
@@ -80,7 +81,16 @@ module.exports = (app) => {
   );
 
   app.get("/api/files", corsMiddleware, async (req, res) => {
-    const { page, limit, markedDeleted, typeFilter, mimeTypes } = req.query;
+    const {
+      page,
+      limit,
+      markedDeleted,
+      searchFilterText,
+      typeFilter,
+      mimeTypes,
+      starred,
+      selectedTagIds,
+    } = req.query;
     const mimeTypeQueryObj = (() => {
       switch (typeFilter) {
         case "TYPE":
@@ -91,22 +101,28 @@ module.exports = (app) => {
           return { $in: [...mimeTypes.split(",")] };
       }
     })();
+
+    const queryObj = {
+      userId: req.user?.id,
+      fileName: { $regex: searchFilterText, $options: "i" },
+      markedDeleted: markedDeleted,
+      mimeType: mimeTypeQueryObj,
+    };
+    if (starred) {
+      queryObj.starred = true;
+    }
+    if (selectedTagIds) {
+      queryObj.tagIds = { $all: selectedTagIds.split(",") };
+    }
+    console.log("queryObj", queryObj);
     try {
-      const filesRes = await FileModel.find({
-        userId: req.user?.id,
-        markedDeleted: markedDeleted,
-        mimeType: mimeTypeQueryObj,
-      })
+      const filesRes = await FileModel.find(queryObj)
         .sort({ createdAt: -1 })
         .limit(limit)
         .skip((page - 1) * limit)
         .exec();
 
-      const count = await FileModel.countDocuments({
-        userId: req.user?.id,
-        markedDeleted: markedDeleted,
-        mimeType: mimeTypeQueryObj,
-      }).exec();
+      const count = await FileModel.countDocuments(queryObj).exec();
 
       console.log("all files 84", filesRes);
       res.status(200).json({ totalFileCount: count, files: filesRes });
@@ -127,16 +143,49 @@ module.exports = (app) => {
     }
   });
 
+  // api for handling file markedDeleted update
   app.delete("/api/file/:id", corsMiddleware, async (req, res) => {
     const { id: fileId } = req.params;
     const { restore = false } = req.query;
     console.log("115", req.params);
     try {
       const mongoRes = await FileModel.findOneAndUpdate(
-        { _id: fileId },
+        { _id: fileId, userId: req.user?.id },
         { markedDeleted: !restore }
       );
       res.status(200).json({ fileId });
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
+  });
+
+  // api for handling tagIds update
+  app.put("/api/file/:id", corsMiddleware, async (req, res) => {
+    const { id: fileId } = req.params;
+    const { fileToBeUploaded } = req.body;
+    console.log(" 156 req", req.body, fileId);
+    try {
+      await FileModel.findOneAndUpdate(
+        { _id: fileId, userId: req.user?.id },
+        { tagIds: fileToBeUploaded.tagIds }
+      );
+      res.status(200).json({ fileToBeUploaded });
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
+  });
+
+  //api for handling file star update
+
+  app.put("/api/file/:id/update-star", corsMiddleware, async (req, res) => {
+    const { id: fileId } = req.params;
+    const { starred } = req.query;
+    try {
+      await FileModel.findOneAndUpdate(
+        { _id: fileId, userId: req.user?.id },
+        { starred: starred }
+      );
+      res.status(200).json({ message: "file updated successfully" });
     } catch (err) {
       res.status(400).json({ message: err.message });
     }

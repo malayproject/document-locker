@@ -13,7 +13,7 @@ const FileSoftDeleteConfirmationModal = (
   const dispatch = useDispatch();
   const selectedFile = useSelector((state) => state.selectFile.selectedFile);
   const handleCancel = () => {
-    dispatch({ type: "SELECT_FILE", payload: null });
+    dispatch({ type: "UNSELECT_FILE" });
     dispatch({ type: "FILE_SOFT_DELETE_CONFIRMATION_MODAL", payload: false });
   };
   const handleClick = useCallback(async () => {

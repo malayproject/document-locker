@@ -6,6 +6,8 @@ import disabledEraseSvg from "../assets/disabledErase.svg";
 import undoTrashSvg from "../assets/undo-trash.svg";
 import axios from "axios";
 import { fetchFilesData } from "../redux/actionCreators";
+import hollowStar from "../assets/star-outline.svg";
+import star from "../assets/star-icon.svg";
 
 const COLUMNS = [
   {
@@ -68,7 +70,6 @@ const COLUMNS = [
     width: 150,
     Cell: (props) => {
       console.log("cell props 65", props.testing);
-      //   console.log("29 Cell props", props.row.id);
       const { value } = props;
       return format(value, "dd/MM/yyyy");
     },
@@ -96,12 +97,40 @@ const COLUMNS = [
               cursor: "pointer",
               backgroundColor: "transparent",
             }}
-            onClick={(e) => {
+            onClick={async (e) => {
               e.stopPropagation();
-              console.log("eqr", e);
+              if (row.original) {
+                try {
+                  dispatch({
+                    type: "FILE_UPDATE_PENDING",
+                    payload: row.original,
+                  });
+                  await axios.put(
+                    `http://localhost:5100/api/file/${
+                      row.original._id
+                    }/update-star?starred=${!row.original.starred}`
+                  );
+                  dispatch({
+                    type: "FILE_UPDATE_FULFILLED",
+                    payload: row.original,
+                  });
+                  dispatch(fetchFilesData());
+                } catch (err) {
+                  dispatch({
+                    type: "FILE_UPDATE_REJECTED",
+                    error: err.message,
+                  });
+                }
+              }
             }}
           >
-            <img src={addATag} alt="delete" width="20px" height="auto" />
+            <img
+              src={row.original.starred ? star : hollowStar}
+              alt="delete"
+              width="16px"
+              height="auto"
+              // style={{ cursor: "pointer" }}
+            />
           </button>
           <button
             className="deleteIcon"
