@@ -7,10 +7,8 @@ const upload = require("../middlewares/multer");
 const client = require("../config/awsConfig");
 const FileModel = mongoose.model("files");
 
-// console.log("starting AWS code");
 const awsPutCall = async (fileToBeUploaded) => {
   try {
-    // const client = new S3Client(awsConfig);
     const input = {
       Body: fileToBeUploaded.buffer,
       Bucket: "doculocker",
@@ -19,7 +17,6 @@ const awsPutCall = async (fileToBeUploaded) => {
         mimetype: fileToBeUploaded.mimetype,
       },
     };
-    // console.log("input 26", input);
     const command = new PutObjectCommand(input);
     const response = await client.send(command);
   } catch (err) {

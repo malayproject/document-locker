@@ -105,9 +105,13 @@ const COLUMNS = [
                     payload: row.original,
                   });
                   await axios.put(
-                    `http://localhost:5100/api/file/${
-                      row.original._id
-                    }/update-star?starred=${!row.original.starred}`
+                    process.env.NODE_ENV === "production"
+                      ? `/api/file/${
+                          row.original._id
+                        }/update-star?starred=${!row.original.starred}`
+                      : `http://localhost:5100/api/file/${
+                          row.original._id
+                        }/update-star?starred=${!row.original.starred}`
                   );
                   dispatch({
                     type: "FILE_UPDATE_FULFILLED",
@@ -153,7 +157,9 @@ const COLUMNS = [
                     type: "FILES_DOWNLOADING_PENDING",
                   });
                   const res = await axios.post(
-                    `http://localhost:5100/api/files/download`,
+                    process.env.NODE_ENV === "PRODUCTION"
+                      ? `/api/files/download`
+                      : `http://localhost:5100/api/files/download`,
                     {
                       filesData: [row.original],
                     }
@@ -200,8 +206,11 @@ const COLUMNS = [
                   payload: row?.original,
                 });
                 try {
+                  console.log("209", process.env.NODE_ENV);
                   const res = await axios.delete(
-                    `http://localhost:5100/api/file/${row.original._id}?restore=true`
+                    process.env.NODE_ENV === "production"
+                      ? `/api/file/${row.original._id}?restore=true`
+                      : `http://localhost:5100/api/file/${row.original._id}?restore=true`
                   );
                   dispatch({ type: "FILE_UPDATE_FULFILLED" });
                   dispatch(fetchFilesData());

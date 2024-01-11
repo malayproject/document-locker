@@ -22,7 +22,9 @@ export const handleFileUpload = (file, forceUpload) => {
       const formData = new FormData();
       formData.append("image", getState().fileUpload.fileToBeUploaded);
       const serverRes = await axios.post(
-        `http://localhost:5100/api/uploadFile?forceUpload=${fileUploadState.forceUpload}`,
+        `${
+          process.env.NODE_ENV === "production" ? "" : "http://localhost:5100"
+        }/api/uploadFile?forceUpload=${fileUploadState.forceUpload}`,
         formData,
         {
           headers: {
@@ -50,7 +52,9 @@ export const fetchFilesData = (options) => {
     try {
       dispatch({ type: "FILES_LOADING_PENDING" });
       const data = await axios.get(
-        `http://localhost:5100/api/files?page=${currentPage}&limit=${rowsPerPage}&markedDeleted=${markedDeleted}&searchFilterText=${searchFilterText}&typeFilter=${typeFilter}&mimeTypes=${mimeTypesString}${
+        `${
+          process.env.NODE_ENV === "production" ? "" : "http://localhost:5100"
+        }/api/files?page=${currentPage}&limit=${rowsPerPage}&markedDeleted=${markedDeleted}&searchFilterText=${searchFilterText}&typeFilter=${typeFilter}&mimeTypes=${mimeTypesString}${
           starred ? "&starred=true" : ""
         }${
           selectedTagIdsString ? `&selectedTagIds=${selectedTagIdsString}` : ""
@@ -76,7 +80,11 @@ export const fetchTagsData = () => {
   return async (dispatch, getState) => {
     try {
       dispatch({ type: "USER_TAGS_LOADING_PENDING" });
-      const data = await axios.get("http://localhost:5100/api/tags");
+      const data = await axios.get(
+        `${
+          process.env.NODE_ENV === "production" ? "" : "http://localhost:5100"
+        }/api/tags`
+      );
       dispatch({
         type: "USER_TAGS_LOADING_FULFILLED",
         payload: data.data.tags,
@@ -97,9 +105,9 @@ export const handleFileFieldsUpdate = () => {
     });
     try {
       await axios.put(
-        `http://localhost:5100/api/file/${
-          getState().fileUpload.fileToBeUploaded._id
-        }`,
+        `${
+          process.env.NODE_ENV === "production" ? "" : "http://localhost:5100"
+        }/api/file/${getState().fileUpload.fileToBeUploaded._id}`,
         {
           fileToBeUploaded: getState().fileUpload.fileToBeUploaded,
         }

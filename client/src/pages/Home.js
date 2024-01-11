@@ -3,12 +3,9 @@ import React, { useEffect, useState, memo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { getUser } from "../helpers";
 import { useDispatch, useSelector } from "react-redux";
-import img from "../assets/google-logo.png";
 import Sidebar from "../components/Sidebar";
 import FileUploadConfirmationModal from "../components/FileUploadConfirmationModal";
 import FileUploadStatusModal from "../components/FileUploadStatusModal";
-// import BaseTable from "../tableConfig/BaseTable.js";
-// import GlobalFilteringTable from "../tableConfig/GlobalFilteringTable.js";
 import TableManager from "../tableConfig/TableManager.js";
 import FileInfoModal from "../components/FileInfoModal.js";
 import FileSoftDeleteConfirmationModal from "../components/FileSoftDeleteConfirmationModal.js";
@@ -23,14 +20,17 @@ const Home = (props) => {
     showUploadConfirmationModal,
     showFileSoftDeleteConfirmationModal,
   } = useSelector((state) => state.showModals);
-  const [uploadSuccessful, setUploadSuccessful] = useState(false);
   const [isFileUpdating, setIsFileUpdating] = useState(false);
 
   const dispatch = useDispatch();
 
   const handleLogout = async (e) => {
     try {
-      await axios.get("http://localhost:5100/api/logout");
+      await axios.get(
+        `${
+          process.env.NODE_ENV === "production" ? "" : "http://localhost:5100"
+        }/api/logout`
+      );
       navigate("/");
     } catch (err) {
       console.error(err.message);

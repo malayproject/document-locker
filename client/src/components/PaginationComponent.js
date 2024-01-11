@@ -57,7 +57,7 @@ const PaginationComponent = () => {
           value={rowsPerPage}
           onChange={handleChange}
           style={{
-            width: "2.8rem",
+            width: "3.6rem",
             border: "none",
             borderRadius: "0.5rem",
             height: "1.2rem",
