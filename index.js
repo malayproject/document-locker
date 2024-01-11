@@ -44,7 +44,6 @@ app.get(
   // passport.authenticate("google"),
   corsMiddleware,
   (req, res) => {
-    // console.log("current-user req", req.user);
     res.send(req.user);
   }
 );
@@ -55,9 +54,7 @@ app.get("/api/logout", corsMiddleware, (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  // console.log("REQ-BODY", req.session);
-  // console.log("hello");
-  res.send("hello");
+  res.send("server running");
 });
 
 /***************************************************************** */

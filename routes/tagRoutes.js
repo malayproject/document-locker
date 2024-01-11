@@ -4,8 +4,6 @@ const corsMiddleware = require("../middlewares/corsMiddleware");
 const TagModel = mongoose.model("tags");
 
 module.exports = (app) => {
-  // get all tags
-
   // add a tag
 
   app.post("/api/tag", corsMiddleware, async (req, res) => {

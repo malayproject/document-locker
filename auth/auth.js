@@ -6,15 +6,11 @@ const UsersModel = mongoose.model("users");
 passport.use(
   new GoogleStrategy(
     {
-      clientID: process.env.GOOGLE_CLIENT_ID || "dfsfs",
+      clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: "/oauth2/redirect/google",
     },
     (accessToken, refreshToken, profile, done) => {
-      console.log("AT", accessToken);
-      console.log("RT", refreshToken);
-      console.log("P", profile);
-      console.log("CB", done);
       UsersModel.findOne({ googleId: profile.id }).then((existingUser) => {
         if (existingUser) {
           done(null, existingUser);
@@ -24,7 +20,6 @@ passport.use(
             .then((user) => done(null, user));
         }
       });
-      // cb();
     }
   )
 );
