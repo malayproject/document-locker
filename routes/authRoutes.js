@@ -12,7 +12,9 @@ module.exports = (app) => {
     (req, res) => {
       res.header("Access-Control-Allow-Methods", "*");
       res.header("Access-Control-Allow-Origin", "*");
-      res.redirect("http://localhost:3000/oauth2/redirect/google");
+      res.redirect(
+        "https://malayproject.github.io/document-locker/oauth2/redirect/google"
+      );
     }
   );
 };
