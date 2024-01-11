@@ -1,8 +1,7 @@
 import { format } from "date-fns";
 import ColumnFilter from "../components/ColumnFilter";
 import eraseSvg from "../assets/erase.svg";
-import addATag from "../assets/add-a-tag.png";
-import disabledEraseSvg from "../assets/disabledErase.svg";
+import downloadIcon from "../assets/download-icon.svg";
 import undoTrashSvg from "../assets/undo-trash.svg";
 import axios from "axios";
 import { fetchFilesData } from "../redux/actionCreators";
@@ -77,7 +76,7 @@ const COLUMNS = [
   {
     id: "actions",
     Header: "Actions",
-    width: 30,
+    width: 60,
     Cell: (props) => {
       console.log(props);
       const { dispatch, row } = props;
@@ -131,6 +130,48 @@ const COLUMNS = [
               height="auto"
               // style={{ cursor: "pointer" }}
             />
+          </button>
+          <button
+            className="addTagIcon"
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              border: "none",
+              cursor: "pointer",
+              backgroundColor: "transparent",
+            }}
+            onClick={async (e) => {
+              e.stopPropagation();
+              if (row.original) {
+                try {
+                  dispatch({
+                    type: "SET_FILES_TO_BE_DOWNLOADED",
+                    payload: [row.original],
+                  });
+                  dispatch({
+                    type: "FILES_DOWNLOADING_PENDING",
+                  });
+                  const res = await axios.post(
+                    `http://localhost:5100/api/files/download`,
+                    {
+                      filesData: [row.original],
+                    }
+                  );
+                  dispatch({
+                    type: "FILES_DOWNLOADING_FULFILLED",
+                    payload: res.data.preSignedUrlsData,
+                  });
+                } catch (err) {
+                  dispatch({
+                    type: "FILES_DOWNLOADING_REJECTED",
+                    error: err.message,
+                  });
+                }
+              }
+            }}
+          >
+            <img src={downloadIcon} alt="delete" width="18px" height="auto" />
           </button>
           <button
             className="deleteIcon"

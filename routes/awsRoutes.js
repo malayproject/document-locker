@@ -1,4 +1,5 @@
-const { PutObjectCommand } = require("@aws-sdk/client-s3");
+const { PutObjectCommand, GetObjectCommand } = require("@aws-sdk/client-s3");
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const mongoose = require("mongoose");
 const { v4: uuidV4 } = require("uuid");
 const corsMiddleware = require("../middlewares/corsMiddleware");
@@ -10,7 +11,6 @@ const FileModel = mongoose.model("files");
 const awsPutCall = async (fileToBeUploaded) => {
   try {
     // const client = new S3Client(awsConfig);
-
     const input = {
       Body: fileToBeUploaded.buffer,
       Bucket: "doculocker",
@@ -28,7 +28,25 @@ const awsPutCall = async (fileToBeUploaded) => {
     console.log("ending AWS code");
   }
 };
-// awsPutCall();
+
+// get presignedUrls
+const awsGetPresignedUrls = async (filesData) => {
+  const preSignedUrls = [];
+  for (const file of filesData) {
+    const fileConfig = {
+      Key: file.s3Key,
+      Bucket: "doculocker",
+      ContentDisposition: `attachment, filename: "abc.png"`,
+    };
+    const command = new GetObjectCommand(fileConfig);
+    const preSignedUrl = await getSignedUrl(client, command, {
+      expiresIn: 120,
+    });
+    preSignedUrls.push({ ...file, preSignedUrl });
+  }
+  return preSignedUrls;
+};
+
 console.log(" corsMiddleware is ", corsMiddleware);
 module.exports = (app) => {
   app.options("*", corsMiddleware);
@@ -42,9 +60,6 @@ module.exports = (app) => {
       const dateTime = Date.now();
       const fileToBeUploaded = req.file;
       fileToBeUploaded.id = uuid;
-      // console.log("requesta 52", req);
-      console.log("requesta 58", req.file);
-      console.log("59 parmas", req.query?.forceUpload);
       const forceUpload = req.query?.forceUpload;
       try {
         const existingFile = await FileModel.findOne({
@@ -124,7 +139,6 @@ module.exports = (app) => {
 
       const count = await FileModel.countDocuments(queryObj).exec();
 
-      console.log("all files 84", filesRes);
       res.status(200).json({ totalFileCount: count, files: filesRes });
     } catch (err) {
       res.status(400).json({ message: err.message });
@@ -136,7 +150,6 @@ module.exports = (app) => {
       const count = await FileModel.countDocuments({
         userId: req.user?.id,
       }).exec();
-      console.log("response 95", count);
       res.status(200).json({ fileCount: count });
     } catch (err) {
       res.status(400).json({ message: err.message });
@@ -163,7 +176,6 @@ module.exports = (app) => {
   app.put("/api/file/:id", corsMiddleware, async (req, res) => {
     const { id: fileId } = req.params;
     const { fileToBeUploaded } = req.body;
-    console.log(" 156 req", req.body, fileId);
     try {
       await FileModel.findOneAndUpdate(
         { _id: fileId, userId: req.user?.id },
@@ -186,6 +198,25 @@ module.exports = (app) => {
         { starred: starred }
       );
       res.status(200).json({ message: "file updated successfully" });
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
+  });
+
+  app.post("/api/files/download", corsMiddleware, async (req, res) => {
+    const { filesData } = req.body;
+    try {
+      const filesRes = await FileModel.find({
+        s3Key: { $in: filesData.map((fileData) => fileData.s3Key) },
+        userId: req.user?.id,
+      }).exec();
+      if (filesData.length !== filesRes.length)
+        throw new Error("Malicious attempt!");
+      const preSignedUrlsData = await awsGetPresignedUrls(filesData);
+      res.status(200).json({
+        message: "presigned urls received successfully",
+        preSignedUrlsData,
+      });
     } catch (err) {
       res.status(400).json({ message: err.message });
     }

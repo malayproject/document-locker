@@ -5,20 +5,29 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchFilesData } from "../redux/actionCreators";
 import FilterComponent from "../components/FilterComponent";
 
-const TableManager = ({
-  uploadSuccessful,
-  setIsFileUpdating,
-  isFileUpdating,
-}) => {
+const TableManager = ({ setIsFileUpdating, isFileUpdating }) => {
   const dispatch = useDispatch();
 
-  const { currentPage, rowsPerPage, isFilesFetching } = useSelector(
-    (state) => state.tableData
-  );
+  const { currentPage, rowsPerPage, isFilesFetching, filesWithPresignedUrls } =
+    useSelector((state) => state.tableData);
 
   useEffect(() => {
     dispatch(fetchFilesData());
   }, [currentPage, rowsPerPage, dispatch]);
+
+  useEffect(() => {
+    if (filesWithPresignedUrls.length) {
+      for (const filesWithPresignedUrl of filesWithPresignedUrls) {
+        const link = document.createElement("a");
+        link.href = filesWithPresignedUrl.preSignedUrl;
+        link.download = filesWithPresignedUrl.fileName;
+        // link.target = "_blank";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    }
+  }, [filesWithPresignedUrls, dispatch]);
 
   return (
     <div className="tableManager">
@@ -29,7 +38,6 @@ const TableManager = ({
           isFileUpdating={isFileUpdating}
         />
       </div>
-
       <PaginationComponent />
     </div>
   );

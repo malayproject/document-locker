@@ -3,6 +3,8 @@ import { TYPEFILTER } from "../constants";
 
 const initialTableDataState = {
   files: [],
+  filesToBeDownloaded: [],
+  filesWithPresignedUrls: [],
   totalFileCount: 0,
   isFilesFetching: false,
   markedDeleted: false,
@@ -65,6 +67,35 @@ const tableDataReducer = (state = initialTableDataState, action) => {
       return { ...state, rowsPerPage: action.payload };
     case "MARKED_DELETED_UPDATE":
       return { ...state, markedDeleted: action.payload };
+    case "SET_FILES_TO_BE_DOWNLOADED":
+      return { ...state, filesToBeDownloaded: action.payload };
+    case "RESET_FILES_TO_BE_DOWNLOADED":
+      return { ...state, filesToBeDownloaded: [] };
+    // case "ADD_FILE_TO_BE_DOWNLOADED":
+    //   return { ...state, filesToBeDownloaded: [...state.filesToBeDownloaded, action.payload] };
+    // case "REMOVE_FILE_TO_BE_DOWNLOADED":
+    //   return { ...state, filesToBeDownloaded: action.payload };
+    case "FILES_DOWNLOADING_PENDING":
+      return {
+        ...state,
+        isFilesDownloadInProgress: true,
+        filesWithPresignedUrls: [],
+        error: null,
+      };
+    case "FILES_DOWNLOADING_FULFILLED":
+      return {
+        ...state,
+        filesWithPresignedUrls: action.payload,
+        isFilesDownloadInProgress: false,
+        filesToBeDownloaded: [],
+      };
+    case "FILES_DOWNLOADING_REJECTED":
+      return {
+        ...state,
+        isFilesDownloadInProgress: false,
+        filesToBeDownloaded: [],
+        error: action.error,
+      };
     default:
       return state;
   }
