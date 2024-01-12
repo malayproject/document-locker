@@ -1,4 +1,5 @@
 const passport = require("passport");
+const redirectUri = process.env.REDIRECT_URI + "/oauth2/redirect/google";
 
 module.exports = (app) => {
   app.get(
@@ -14,7 +15,7 @@ module.exports = (app) => {
       res.header("Access-Control-Allow-Origin", "*");
       res.redirect(
         // "https://main--beautiful-llama-b6d890.netlify.app/oauth2/redirect/google"
-        "http://localhost:3000/oauth2/redirect/google"
+        redirectUri
       );
     }
   );
