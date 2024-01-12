@@ -23,6 +23,7 @@ app.use(
     keys: [process.env.cookieKey1, process.env.cookieKey2],
     maxAge: 4 * 60 * 60 * 1000, // 4 hrs
     sameSite: "none",
+    secure: true,
   })
 );
 app.use(passport.initialize());
