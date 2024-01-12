@@ -13,7 +13,7 @@ module.exports = (app) => {
       res.header("Access-Control-Allow-Methods", "*");
       res.header("Access-Control-Allow-Origin", "*");
       res.redirect(
-        "https://malayproject.github.io/document-locker/oauth2/redirect/google"
+        "https://main--beautiful-llama-b6d890.netlify.app/oauth2/redirect/google"
       );
     }
   );
