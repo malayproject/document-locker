@@ -16,7 +16,7 @@ function App() {
             <Route path="home" element={<Home />} />
             <Route
               path="oauth2/redirect/google"
-              element={<Navigate to="/home" />}
+              element={<Navigate to="home" />}
             />
           </Route>
           <Route path="/*" element={<h1>Wrong path</h1>} />
