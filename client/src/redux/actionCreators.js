@@ -80,6 +80,7 @@ export const fetchTagsData = () => {
   return async (dispatch, getState) => {
     try {
       dispatch({ type: "USER_TAGS_LOADING_PENDING" });
+      console.log("NODE_ENV", process.env.NODE_ENV);
       const data = await axios.get(
         `${
           process.env.NODE_ENV === "production" ? "" : "http://localhost:5100"

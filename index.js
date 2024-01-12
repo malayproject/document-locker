@@ -53,7 +53,7 @@ app.get("/api/logout", corsMiddleware, (req, res) => {
   res.send("fddjfgsj");
 });
 
-app.get("/", (req, res) => {
+app.get("/health", (req, res) => {
   res.send("server running");
 });
 

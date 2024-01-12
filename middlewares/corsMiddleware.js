@@ -4,7 +4,7 @@ module.exports = (req, res, next) => {
   res.header("Access-Control-Allow-Methods", "POST, PUT, GET, DELETE, OPTIONS");
   res.header(
     "Access-Control-Allow-Origin",
-    "https://malayproject.github.io/document-locker/"
+    "https://main--beautiful-llama-b6d890.netlify.app"
   );
   res.header(
     "Access-Control-Allow-Headers",
