@@ -19,9 +19,7 @@ const FileSoftDeleteConfirmationModal = (
   const handleClick = useCallback(async () => {
     dispatch({ type: "FILE_UPDATE_PENDING", payload: selectedFile });
     try {
-      const res = await axios.delete(
-        `http://localhost:5100/api/file/${selectedFile?._id}`
-      );
+      const res = await axios.delete(`/api/file/${selectedFile?._id}`);
       dispatch({ type: "FILE_UPDATE_FULFILLED" });
       dispatch({ type: "FILE_SOFT_DELETE_CONFIRMATION_MODAL", payload: true });
       dispatch(fetchFilesData());

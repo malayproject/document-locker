@@ -105,13 +105,8 @@ const COLUMNS = [
                     payload: row.original,
                   });
                   await axios.put(
-                    process.env.NODE_ENV === "production"
-                      ? `/api/file/${
-                          row.original._id
-                        }/update-star?starred=${!row.original.starred}`
-                      : `http://localhost:5100/api/file/${
-                          row.original._id
-                        }/update-star?starred=${!row.original.starred}`
+                    `/api/file/${row.original._id}/update-star?starred=${!row
+                      .original.starred}`
                   );
                   dispatch({
                     type: "FILE_UPDATE_FULFILLED",
@@ -156,14 +151,9 @@ const COLUMNS = [
                   dispatch({
                     type: "FILES_DOWNLOADING_PENDING",
                   });
-                  const res = await axios.post(
-                    process.env.NODE_ENV === "PRODUCTION"
-                      ? `/api/files/download`
-                      : `http://localhost:5100/api/files/download`,
-                    {
-                      filesData: [row.original],
-                    }
-                  );
+                  const res = await axios.post(`/api/files/download`, {
+                    filesData: [row.original],
+                  });
                   dispatch({
                     type: "FILES_DOWNLOADING_FULFILLED",
                     payload: res.data.preSignedUrlsData,
@@ -208,9 +198,7 @@ const COLUMNS = [
                 try {
                   console.log("209", process.env.NODE_ENV);
                   const res = await axios.delete(
-                    process.env.NODE_ENV === "production"
-                      ? `/api/file/${row.original._id}?restore=true`
-                      : `http://localhost:5100/api/file/${row.original._id}?restore=true`
+                    `/api/file/${row.original._id}?restore=true`
                   );
                   dispatch({ type: "FILE_UPDATE_FULFILLED" });
                   dispatch(fetchFilesData());

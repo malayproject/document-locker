@@ -13,7 +13,7 @@ const GlobalFilteringTable = ({ uploadSuccessful }) => {
   const [filesData, setFilesData] = useState([]);
   const fetchFilesData = async () => {
     try {
-      const data = await axios.get("http://localhost:5100/api/files");
+      const data = await axios.get("/api/files");
       console.log("data 11", data.data.files);
       setFilesData(data.data?.files || []);
     } catch (err) {

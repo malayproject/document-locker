@@ -4,7 +4,8 @@ module.exports = (req, res, next) => {
   res.header("Access-Control-Allow-Methods", "POST, PUT, GET, DELETE, OPTIONS");
   res.header(
     "Access-Control-Allow-Origin",
-    "https://main--beautiful-llama-b6d890.netlify.app"
+    // "https://main--beautiful-llama-b6d890.netlify.app"
+    "http://localhost:3000"
   );
   res.header(
     "Access-Control-Allow-Headers",

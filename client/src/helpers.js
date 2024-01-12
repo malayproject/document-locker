@@ -1,14 +1,14 @@
 import axios from "axios";
 import { MIMETYPES, MIMETYPE_VS_DISPLAYTEXT } from "./constants";
-axios.defaults.withCredentials = true;
 
 export const getUser = async () => {
   //   alert("axios");
-  return axios.get("http://localhost:5100/current-user");
+  return axios.get("/current-user");
 };
 
 export const getAbsoluteUrl = (relPath) => {
-  if (relPath === "/auth/google") return `http://localhost:5100${relPath}`;
+  if (relPath === "/auth/google")
+    return `${process.env.REACT_APP_SERVER_URL}${relPath}`;
   else return `http://localhost:3000${relPath}`;
 };
 
