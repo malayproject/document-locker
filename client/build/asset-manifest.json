@@ -1,0 +1,28 @@
+{
+  "files": {
+    "main.css": "/static/css/main.5ab82a84.css",
+    "main.js": "/static/js/main.c0979e19.js",
+    "static/js/787.d5fa4d18.chunk.js": "/static/js/787.d5fa4d18.chunk.js",
+    "static/media/google-logo.png": "/static/media/google-logo.b31361249fb7518952ee.png",
+    "static/media/pdf2.png": "/static/media/pdf2.aacb69609788932e4e72.png",
+    "static/media/star-icon.svg": "/static/media/star-icon.4ea60ea28f8b5c31d6ea585febafd66b.svg",
+    "static/media/download-icon.svg": "/static/media/download-icon.94dff6786623b05219c822a40b9fecd9.svg",
+    "static/media/search-icon.svg": "/static/media/search-icon.dcc917b4aaedba50220f7e8a520b49a2.svg",
+    "static/media/star-outline.svg": "/static/media/star-outline.67ab7e17819ef8ff118e2c081fa93c94.svg",
+    "index.html": "/index.html",
+    "static/media/headphone.svg": "/static/media/headphone.abc6a420ec4935886e5ff0480b0b904d.svg",
+    "static/media/undo-trash.svg": "/static/media/undo-trash.cf18c44be63a37239ce67a8a09cb7231.svg",
+    "static/media/upload-solid.svg": "/static/media/upload-solid.3beced95243130ead9b0ba30e0edf1f3.svg",
+    "static/media/xmark-solid.svg": "/static/media/xmark-solid.fea12710afb58ce9b340aabda8ea7c72.svg",
+    "static/media/erase.svg": "/static/media/erase.a89411e85b307d01f5bc1bb2be1450d5.svg",
+    "static/media/check-solid.svg": "/static/media/check-solid.aa8ba2d16a2edbe434d1f956be9c5fee.svg",
+    "static/media/caret-down-solid.svg": "/static/media/caret-down-solid.5e034e9a02802622031dfcb7d21e13fc.svg",
+    "main.5ab82a84.css.map": "/static/css/main.5ab82a84.css.map",
+    "main.c0979e19.js.map": "/static/js/main.c0979e19.js.map",
+    "787.d5fa4d18.chunk.js.map": "/static/js/787.d5fa4d18.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.5ab82a84.css",
+    "static/js/main.c0979e19.js"
+  ]
+}
