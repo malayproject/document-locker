@@ -6,6 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import "./axios";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+console.log(process.env.REACT_APP_SERVER_URL);
 root.render(
   // <React.StrictMode>
   <App />
