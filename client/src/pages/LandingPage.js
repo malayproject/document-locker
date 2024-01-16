@@ -3,6 +3,7 @@ import { getAbsoluteUrl } from "../helpers";
 import { Link } from "react-router-dom";
 import google_logo from "../assets/google-logo.png";
 import github_logo from "../assets/github-mark.png";
+import cloudStore from "../assets/cloud-store.png";
 
 const LandingPage = (props) => {
   return (
@@ -17,6 +18,7 @@ const LandingPage = (props) => {
       </div>
       <div className="loginColumn">
         <div className="logoContainer">
+          <img src={cloudStore} alt="logo" width="140" />
           <span>Docu-Locker</span>
         </div>
         <div className="loginContainer">

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="24 24 200 200" xmlns="http://www.w3.org/2000/svg">
+  <path d="M 49.84 78.983 L 125.05 48.368 L 200.26 78.983" stroke="currentColor" style="stroke-dashoffset: -13px; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round; stroke-width: 10px; paint-order: fill;"/>
+  <path d="M 185.45 124.852 L 185.791 185.519 C 185.809 188.656 183.49 191.207 180.602 191.205 L 69.201 191.186 C 66.321 191.186 63.965 188.635 63.949 185.499 L 63.607 124.832" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width: 18px; fill-opacity: 0.18; paint-order: fill; transform-origin: 124.715px 158.02px;"/>
+</svg>

@@ -7,6 +7,7 @@ import axios from "axios";
 import { fetchFilesData } from "../redux/actionCreators";
 import hollowStar from "../assets/star-outline.svg";
 import star from "../assets/star-icon.svg";
+import ToolTipComponent from "../components/ToolTipComponent";
 
 const COLUMNS = [
   {
@@ -131,7 +132,7 @@ const COLUMNS = [
             />
           </button>
           <button
-            className="addTagIcon"
+            className="addTagIcon tooltip"
             style={{
               display: "flex",
               justifyContent: "center",
@@ -168,9 +169,10 @@ const COLUMNS = [
             }}
           >
             <img src={downloadIcon} alt="delete" width="18px" height="auto" />
+            <ToolTipComponent toolTipText="download" position="top" />
           </button>
           <button
-            className="deleteIcon"
+            className="deleteIcon tooltip"
             style={{
               display: "flex",
               justifyContent: "center",
@@ -215,8 +217,12 @@ const COLUMNS = [
             <img
               src={row?.original?.markedDeleted ? undoTrashSvg : eraseSvg}
               alt="delete"
-              width="20px"
+              width={row.original.markerDeleted ? "16" : "20"}
               height="auto"
+            />
+            <ToolTipComponent
+              toolTipText={row?.original?.markedDeleted ? "restore" : "delete"}
+              position="top-left"
             />
           </button>
         </div>

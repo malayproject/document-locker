@@ -26,6 +26,7 @@ const initialFiltersState = {
 
 const initialSidebarState = {
   userTagsFeatureExpanded: false,
+  sidebarExpanded: true,
 };
 
 const initialSelectFileState = {
@@ -235,6 +236,12 @@ const modalsReducer = (state = initalModalsState, action) => {
 
 const sidebarReducer = (state = initialSidebarState, action) => {
   switch (action.type) {
+    case "SIDEBAR_EXPAND":
+      return {
+        ...state,
+        sidebarExpanded: !state.sidebarExpanded,
+        userTagsFeatureExpanded: false,
+      };
     case "USER_TAGS_EXPAND":
       return {
         ...state,

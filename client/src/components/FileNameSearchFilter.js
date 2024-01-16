@@ -16,7 +16,7 @@ const FileNameSearchFilter = () => {
   return (
     <div className="fileNameSearchFilter">
       <div className="searchIconContainer">
-        <img src={SearchSvg} alt="search" width="20px" />
+        <img src={SearchSvg} alt="search" width="16px" />
       </div>
       <div className="searchTextContainer">
         <input

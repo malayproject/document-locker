@@ -11,6 +11,8 @@ const TableManager = ({ setIsFileUpdating, isFileUpdating }) => {
   const { currentPage, rowsPerPage, isFilesFetching, filesWithPresignedUrls } =
     useSelector((state) => state.tableData);
 
+  const { sidebarExpanded } = useSelector((state) => state.sidebar);
+
   useEffect(() => {
     dispatch(fetchFilesData());
   }, [currentPage, rowsPerPage, dispatch]);
@@ -30,7 +32,7 @@ const TableManager = ({ setIsFileUpdating, isFileUpdating }) => {
   }, [filesWithPresignedUrls, dispatch]);
 
   return (
-    <div className="tableManager">
+    <div className={`tableManager${sidebarExpanded ? "" : " collapsed"}`}>
       <FilterComponent />
       <div style={{ overflowY: "scroll", height: "89vh" }}>
         <BaseTable

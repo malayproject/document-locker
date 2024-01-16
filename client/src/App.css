@@ -40,12 +40,13 @@ body {
 
 .loginColumn .logoContainer {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   margin-top: 10rem;
   /* border: 1px solid black; */
   font-family: 'Signika Negative', sans-serif;
-  font-size: 3.4rem;
+  font-size: 3rem;
   font-weight: 700;
 }
 
@@ -94,22 +95,69 @@ body {
 }
 
 .home .sidebar {
-  width: max(10rem, 15%);
-
+  width: max(10rem, 12%);
+  /* display: flex; */
+  flex-direction: column;
+  /* flex-basis: max(10rem, 16%);
+  flex-grow: 1;
+  flex-shrink: 1; */
   height: 100vh;
   max-height: 100vh;
-  background-color: rgb(255, 255, 255);
+  background-color: rgb(250, 250, 250);
+  position: relative;
+  transition: width 0.2s ease-out;
+  z-index: 1;
   /* box-shadow: -1rem -1rem 1.6rem 0.6rem rgb(53, 53, 53); */
   /* border: 1px solid red; */
 }
 
-.home .logoContainer {
+.home .sidebar:hover {
+  background-color: rgb(245, 245, 245);
+}
 
-  margin: 1rem 0 2rem 1rem;
+.home .sidebar.collapsed {
+  width: 3.5rem;
+  /* flex-basis: 2rem; */
+
+}
+
+.sidebar .collapseBtnContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  background-color: #76bf0e;
+  position: absolute;
+  right: -1rem;
+  bottom: 5rem;
+  background-color: #e9e9e9;
+  z-index: 3;
+  cursor: pointer;
+  box-shadow: 0 0 0.2rem 0.15rem rgb(135, 187, 133);
+}
+
+.sidebar .collapseBtnContainer > * {
+  background-color: transparent;
+  /* filter: invert(); */
+}
+
+.home .logoContainer {
+  display: flex;
+  align-items: center;
+  /* justify-content: space-around; */
+  gap: 0.5rem;
+  margin: 1rem 0 2rem 0.5rem;
   /* border: 1px solid black; */
   font-family: 'Signika Negative', sans-serif;
-  font-size: 2rem;
+  font-size: 1.6rem;
   font-weight: 700;
+}
+
+.home .logoContainer img  {
+  filter: constrast(100%);
 }
 
 .home  .featureContainer {
@@ -121,6 +169,9 @@ body {
 }
 
 .home .featureContainer > .feature {
+  display: flex;
+  justify-content: left;
+  align-items: center;
   width: 100%;
   height: 2.2rem;
   border: none;
@@ -128,11 +179,7 @@ body {
   font-weight: 400;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   letter-spacing: .05rem;
-  display: flex;
-  justify-content: left;
-  align-items: center;
   color: #599800;
-  /* padding-left: 1rem; */
   cursor: pointer;
   background-color: transparent;
 }
@@ -157,6 +204,28 @@ body {
   border-radius: 0.3rem;
   background-color: transparent;
   transition: height 0.3s;
+}
+
+.featureContainer .feature > *{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.featureContainer .featureText {
+  display: inline-block;
+  overflow: hidden;
+  margin-left: 0.5rem;
+  /* opacity: 1; */
+  width: max-content;
+  transition: width 1s linear;
+  transition-delay: 2s;
+}
+
+.featureContainer .featureText.hidden {
+  /* opacity: 0; */
+  width: 0px;
+/* display: none; */
 }
 
 .home .tagsContainer {
@@ -186,75 +255,59 @@ body {
   transform: scaleY(0);
 }
 
-.home .fileuploadstatusmodal {
+.home .modal {
+  width: 100vw;
+  height: 100vh;
   position: fixed;
-  width: 20rem;
-  height: 10rem;
-  left: calc(50% - 10rem);
-  top: calc(50% - 5rem);
-  border-radius: 0.4rem;
-  box-shadow: 0rem 0rem 1rem 0.02rem grey;
-  background-color: antiquewhite;
+  z-index: 10;
+  backdrop-filter: blur(3px);
 }
 
-.home .confirmationmodal {
-  position: fixed;
-  width: 20rem;
-  height: 10rem;
-  left: calc(50% - 10rem);
-  top: calc(50% - 5rem);
-  border-radius: 0.4rem;
-  box-shadow: 0rem 0rem 1rem 0.02rem grey;
-  background-color: antiquewhite;
-}
-
-.home .filesoftdeleteconfmodal {
-  position: fixed;
-  width: 20rem;
-  height: 10rem;
-  left: calc(50% - 10rem);
-  top: calc(50% - 5rem);
-  border-radius: 0.4rem;
-  box-shadow: 0rem 0rem 1rem 0.02rem grey;
-  background-color: antiquewhite;
-}
-
-.home .fileInfoModal {
+.home .fileInfoModal, .home .filesoftdeleteconfmodal, .home .confirmationmodal, .home .fileuploadstatusmodal {
   position: fixed;
   width: 40rem;
-  /* height: 30rem; */
   left: calc(50% - 20rem);
   top: calc(50% - 15rem);
   border-radius: 0.4rem;
-  box-shadow: 0rem 0rem 1rem 0.02rem grey;
-  background-color: antiquewhite;
+  box-shadow: 0rem 0rem 1rem 0.05rem grey;
+  background-color: rgb(28, 111, 0);
   display: flex;
   flex-direction: column;
+}
+.home .fileInfoModal {
+  width: 40rem;
+  left: calc(50% - 20rem);
+  top: calc(50% - 15rem);
+}
+
+.home .filesoftdeleteconfmodal, .home .confirmationmodal, .home .fileuploadstatusmodal {
+  width: 20rem;
+  left: calc(50% - 10rem);
+  top: calc(50% - 8rem);
 }
 
 .home .tableManager {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 85%;
+  position: relative;
+  padding: 0.4rem;
+  width: calc(100vw - max(10rem, 12%));
+  transition: width 0.2s ease-out;
   height: 100vh;
   background-color: rgb(255, 255, 255);
-  /* padding: 3rem; */
-  /* overflow: auto; */
-  /* width: 100%; */
-  /* min-height: 100vh; */
-  /* height: 100%; */
-  position: relative;
-  /* margin-bottom: 5rem; */
-  /* background-color: chocolate; */
+  z-index: 0;
+}
+
+.home .tableManager.collapsed {
+  width: calc(100vw - 3.5rem);
 }
 
 .filterComponent {
   top: 0;
   width: 100%;
-  height: 6rem;
   /* border: 1px solid grey; */
-  padding: 1rem;
+  padding: 1rem 0;
 }
 
 .paginationComponent {
@@ -307,21 +360,8 @@ body {
 .filesTable {
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
-  width: 100%;
-
-  /* overflow: auto; */
-  /* overflow: scroll; */
-  /* position: relative; */
-  /* height: inherit; */
-  /* min-height: 100vh; */
-  /* border-radius: 1rem; */
+  width: calc(100% - 0rem);
 }
-
-.filesTable tbody {
-
-}
-
-
 
 .filesTable tr {
   height: 1.4rem;
@@ -343,14 +383,16 @@ body {
 border-radius: 0 1rem 0 0;
 }
 
-.filesTable tr:nth-child(even){background-color: #f0f3ff;}
+.filesTable tr:nth-child(odd){background-color: #f8fff8;}
 
-.filesTable tr:hover {background-color: #cdd7ff;}
+.filesTable tr:nth-child(even){background-color: #e9ffe9;}
+
+.filesTable tr:hover {background-color: #daedda;}
 
 .filesTable th, tfoot td {
   padding-bottom: 12px;
   text-align: center;
-  background-color: #5e7bff;
+  background-color: #4f6f52;
   color: white;
   z-index: 1;
   height: 4rem;
@@ -358,6 +400,7 @@ border-radius: 0 1rem 0 0;
 
 tbody td {
   cursor: pointer;
+  z-index: 2;
 }
 
 .loadingtable {
@@ -368,19 +411,50 @@ tbody td {
   align-items: center;
 }
 
-.fileInfoModal .modalHeader {
-  height: 3.5rem;
+.fileInfoModal .modalHeader, .filesoftdeleteconfmodal .modalHeader, .fileuploadstatusmodal .modalHeader, .confirmationmodal .modalHeader {
+  height: 3rem;
   font-size: 1.4rem;
   font-weight: 500;
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  padding-left: 1rem;
+  padding: 0 1rem;
+  /* background-color: #436b0b; */
+  color: white;
+}
+
+.filesoftdeleteconfmodal .modalHeader, .fileuploadstatusmodal .modalHeader, .confirmationmodal .modalHeader {
+  height: 2rem;
+  font-size: 1.1rem;
+  background-color: transparent;
+}
+
+.filesoftdeleteconfmodal .statusText, .fileuploadstatusmodal .statusText, .confirmationmodal .statusText {
+  width: 100%;
+  height: 5rem;
+  padding: 1rem;
+  background-color: rgb(83, 252, 195);
+}
+
+.filesoftdeleteconfmodal .statusFooter, .fileuploadstatusmodal .statusFooter, .confirmationmodal .statusFooter {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  height: 2rem;
+  padding: 1rem;
+  background-color: rgb(83, 252, 195);
+}
+
+.fileInfoModal .label {
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
 .fileInfoModal .modalBody {
   display: flex;
   background-color: darkcyan;
-  height: 20rem;
+  /* height: 20rem; */
   /* padding: 2rem; */
 }
 
@@ -390,18 +464,26 @@ tbody td {
   padding: 1rem;
 }
 
+.fileInfoModal .bodyLeft > * {
+  margin-bottom: 0.3rem;
+}
+
 .fileInfoModal .isFileTagContainer {
   /* height: 4rem; */
   /* min-height: 4rem; */
   overflow-y: auto;
 }
 
-.fileInfoModal .isFileTagContainer > * {
+.fileInfoModal .isFileTagContainer .isFileTag {
   display: inline-block;
 }
 
-.fileInfoModal .isNotFileTagContainer {
-  height: 6rem;
+.fileInfoModal .isNotFileTagContainer .isNotFileTags{
+  width: 20rem;
+  height: 5rem;
+  padding: 0 1rem;
+  border-radius: 0.3rem;
+  background-color: #a3ffd2;
   overflow-y: auto;
 }
 
@@ -435,8 +517,42 @@ tbody td {
   border-radius: 0.3rem;
 }
 
-.fileInfoModal .modalClose {
+.fileInfoModal .btnsContainer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
   height: 2rem;
+}
+
+.fileInfoModal .modalClose, .fileInfoModal .modalSave {
+  width: 3rem;
+  font-size:small;
+  font-weight: 600;
+  color: white;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  /* height: 2rem; */
+}
+
+.fileInfoModal .modalClose {
+  background-color: #5b9c00;
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 50%;
+}
+
+.fileInfoModal .modalSave {
+  /* background-color: #467900; */
+  font-size: 0.95rem;
+  height: 1.6rem;
+}
+
+.fileInfoModal .modalSave:hover {
+  /* background-color: #00b00c; */
+  font-size: 0.98rem;
+  border-radius: 0.5rem;
 }
 
 .typeFilter {
@@ -463,7 +579,7 @@ tbody td {
   flex-direction: row;
   padding: 0.1rem 0.8rem;
   gap: 0.4rem;
-  background-color: rgb(128, 255, 219);
+  background-color: rgb(94, 220, 126);
   border-radius: 0.6rem 0 0 0.6rem;
 }
 
@@ -471,19 +587,27 @@ tbody td {
   border-radius: 0.6rem;
   padding-right: 1rem;
   background-color: transparent;
-  border: 0.1rem solid rgb(163, 163, 163);
-  /* box-shadow: 0 0 0.4rem 0.05rem rgb(184, 184, 184); */
+  /* border: 0.1rem solid rgb(145, 181, 116); */
+  box-shadow: 0 0 0.25rem 0.02rem rgb(112, 142, 87);
+}
+
+.filterTextContainer.TYPE:hover {
+  border-radius: 0.6rem;
+  padding-right: 1rem;
+  /* background-color: rgb(111, 225, 140); */
+  /* border: 0.1rem solid rgb(145, 181, 116); */
+  box-shadow: 0 0 0.35rem 0.03rem rgb(112, 142, 87);
 }
 
 .crossIconContainer {
   padding: 0.4rem 0.8rem;
-  background-color: rgb(128, 255, 219);
+  background-color: rgb(94, 220, 126);
   border-radius: 0 0.6rem 0.6rem 0;
 
 }
 
 .filterTextContainer:hover, .crossIconContainer:hover {
-  background-color: rgb(100, 245, 204);
+  background-color: rgb(146, 235, 169);
   cursor: pointer;
 }
 
@@ -520,10 +644,13 @@ tbody td {
   padding: 0 0.4rem;
   gap: 0.4rem;
   cursor: pointer;
+  letter-spacing: 0.01rem;
 }
 
 .typeFilterOption:hover {
-  background-color: #d5d5d5;
+  background-color: #d1ffc4;
+  font-weight: 500;
+  letter-spacing: normal;
 }
 
 .filterContainer {
@@ -538,6 +665,7 @@ tbody td {
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  
   gap: 1rem;
 }
 
@@ -592,7 +720,8 @@ tbody td {
   position: relative;
   border-radius: 0.6rem;
   justify-content: flex-start;
-  border: 1px solid rgb(163, 163, 163);
+  /* border: 1px solid rgb(163, 163, 163); */
+  box-shadow: 0 0 0.25rem 0.02rem rgb(112, 142, 87);
   padding: 0.2rem 0.6rem;
 }
 
@@ -603,6 +732,8 @@ tbody td {
   align-items: center;
   /* justify-content: center; */
 }
+
+
 
 .searchTextContainer {
   
@@ -619,6 +750,33 @@ tbody td {
   font-size: 1rem;
 }
 
+.tooltip {
+  position: relative;
+}
+
+.tooltip .toolTipText {
+  /* display: none; */
+  visibility: hidden;
+  position: absolute;
+  padding: 0.6rem;
+  border: 1px solid grey;
+  border-radius: 0.4rem;
+  background-color: #2a4900;
+  opacity: 1;
+  font-weight: 600;
+  width: max-content;
+  color: white;
+  font-size: 0.8rem;
+  /* z-index: 8; */
+}
+
+.tooltip:hover .toolTipText {
+  transition-property: visibility;
+  transition-delay: 0.5s;
+  visibility: visible;
+  /* display: inline; */
+}
+
 ::-webkit-scrollbar {
   width: 0.4rem;
   
@@ -628,6 +786,6 @@ tbody td {
   margin-right: 2rem;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: #bdbdbd;
+  background-color: #6fba96;
   border-radius: 0.2rem;
 }

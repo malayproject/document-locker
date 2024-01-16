@@ -32,6 +32,7 @@ const BaseTable = ({ setIsFileUpdating, isFileUpdating }) => {
     {
       columns: columns,
       data: data,
+      noDataText: "No Data",
     },
     useRowSelect,
     (hooks) => {
@@ -90,6 +91,7 @@ const BaseTable = ({ setIsFileUpdating, isFileUpdating }) => {
       >
         {rows.map((row) => {
           prepareRow(row);
+          console.log("columns 94", columns);
           return (
             <tr
               {...row.getRowProps({
@@ -98,7 +100,6 @@ const BaseTable = ({ setIsFileUpdating, isFileUpdating }) => {
               })}
             >
               {row.cells.map((cell) => {
-                // console.log("90", cell);
                 return (
                   <td {...cell.getCellProps()}>
                     {cell.render("Cell", {
@@ -110,12 +111,20 @@ const BaseTable = ({ setIsFileUpdating, isFileUpdating }) => {
             </tr>
           );
         })}
-        {/* <tr>
-            {rows[0].cells.map((cell) => (
-              <td></td>
-            ))}
-            {console.log("row one", rows[0])}
-          </tr> */}
+        {rows.length === 0 && (
+          <tr>
+            <td
+              colSpan={columns.length + 1}
+              style={{
+                textAlign: "center",
+                fontWeight: "500",
+                border: "none",
+              }}
+            >
+              No data found
+            </td>
+          </tr>
+        )}
       </tbody>
       {/* )} */}
       {/* <pre>

@@ -1,5 +1,14 @@
 import { memo, useCallback } from "react";
+import doculockerIcon from "../assets/cloud-store.png";
 import upload_svg from "../assets/upload-solid.svg";
+import leftArrowPng from "../assets/left-arrow-angle.png";
+import rightArrowPng from "../assets/right-arrow-angle.png";
+import logoutSvg from "../assets/logout-1.svg";
+import homeSvg from "../assets/house-solid.svg";
+import trashSvg from "../assets/trash_18.svg";
+import starSvg from "../assets/star-solid.svg";
+import tagsSvg from "../assets/tags-solid.svg";
+
 import { useSelector, useDispatch } from "react-redux";
 import _ from "lodash";
 import {
@@ -8,13 +17,14 @@ import {
   fetchTagsData,
   handleFileUpload,
 } from "../redux/actionCreators";
+import ToolTipComponent from "./ToolTipComponent";
 
 const Sidebar = ({ handleLogout }) => {
   const dispatch = useDispatch();
 
   const userTags = useSelector((state) => state.userTagsData.userTags);
-  const userTagsFeatureExpanded = useSelector(
-    (state) => state.sidebar.userTagsFeatureExpanded
+  const { userTagsFeatureExpanded, sidebarExpanded } = useSelector(
+    (state) => state.sidebar
   );
 
   const { fileToBeUploaded, fileUploading, forceUpload, error } = useSelector(
@@ -38,20 +48,38 @@ const Sidebar = ({ handleLogout }) => {
   };
 
   return (
-    <div className="sidebar">
+    <div className={`sidebar${sidebarExpanded ? "" : " collapsed"}`}>
       <div className="logoContainer">
-        <span>Docu-Locker</span>
+        <img src={doculockerIcon} alt="logo" width="40" height="40" />
+        <span style={{ overflow: "hidden", whiteSpace: "nowrap" }}>
+          Docu-Locker
+        </span>
       </div>
       <div className="featureContainer">
         <div className="feature">
-          <div onClick={handleLogout} style={{ paddingLeft: "1rem" }}>
-            Logout
+          <div
+            className="tooltip"
+            onClick={handleLogout}
+            style={{ paddingLeft: "0.5rem" }}
+          >
+            <img src={logoutSvg} alt="logout" width="31" />
+            <span className={`featureText${sidebarExpanded ? "" : " hidden"}`}>
+              Logout
+            </span>
+            {!sidebarExpanded && (
+              <ToolTipComponent toolTipText="logout" position="right" />
+            )}
           </div>
         </div>
         <label htmlFor="fileinput" className="feature">
-          <div className="" style={{ paddingLeft: "1rem" }}>
-            Upload file
-            <img src={upload_svg} alt="" width="18px" height="auto" />
+          <div className="tooltip" style={{ paddingLeft: "0.6rem" }}>
+            <img src={upload_svg} alt="" width="26" height="auto" />
+            <span className={`featureText${sidebarExpanded ? "" : " hidden"}`}>
+              Upload file
+            </span>
+            {!sidebarExpanded && (
+              <ToolTipComponent toolTipText="upload file" position="right" />
+            )}
             <input
               id="fileinput"
               type="file"
@@ -68,8 +96,14 @@ const Sidebar = ({ handleLogout }) => {
             dispatch(fetchFilesData());
           }}
         >
-          <div className="" style={{ paddingLeft: "1rem" }}>
-            DashBoard
+          <div className="tooltip" style={{ paddingLeft: "0.6rem" }}>
+            <img src={homeSvg} alt="home" width="26" />
+            <span className={`featureText${sidebarExpanded ? "" : " hidden"}`}>
+              DashBoard
+            </span>
+            {!sidebarExpanded && (
+              <ToolTipComponent toolTipText="dashboard" position="right" />
+            )}
           </div>
         </div>
         <div
@@ -80,8 +114,14 @@ const Sidebar = ({ handleLogout }) => {
             dispatch(fetchFilesData());
           }}
         >
-          <div className="" style={{ paddingLeft: "1rem" }}>
-            Trash
+          <div className="tooltip" style={{ paddingLeft: "0.5rem" }}>
+            <img src={trashSvg} alt="home" width="28" />
+            <span className={`featureText${sidebarExpanded ? "" : " hidden"}`}>
+              Trash
+            </span>
+            {!sidebarExpanded && (
+              <ToolTipComponent toolTipText="deleted files" position="right" />
+            )}
           </div>
         </div>
         <div
@@ -92,11 +132,17 @@ const Sidebar = ({ handleLogout }) => {
             dispatch(fetchFilesData({ starred: true }));
           }}
         >
-          <div className="" style={{ paddingLeft: "1rem" }}>
-            Starred
+          <div className="tooltip" style={{ paddingLeft: "0.5rem" }}>
+            <img src={starSvg} alt="home" width="28" />
+            <span className={`featureText${sidebarExpanded ? "" : " hidden"}`}>
+              Starred
+            </span>
+            {!sidebarExpanded && (
+              <ToolTipComponent toolTipText="starred files" position="right" />
+            )}
           </div>
         </div>
-        <div
+        {/* <div
           className="feature"
           onClick={() => {
             dispatch({ type: "CURRENT_PAGE_UPDATE", payload: 1 });
@@ -107,7 +153,7 @@ const Sidebar = ({ handleLogout }) => {
           <div className="" style={{ paddingLeft: "1rem" }}>
             Recent
           </div>
-        </div>
+        </div> */}
         <div
           className="feature tagFeature"
           onClick={(e) => {
@@ -117,8 +163,17 @@ const Sidebar = ({ handleLogout }) => {
             dispatch({ type: "USER_TAGS_EXPAND" });
           }}
         >
-          <div className="" style={{ paddingLeft: "1rem" }}>
-            User Tags
+          <div
+            className="tooltip"
+            style={{ paddingLeft: "0.5rem", position: "relative" }}
+          >
+            <img src={tagsSvg} alt="home" width="27" />
+            <span className={`featureText${sidebarExpanded ? "" : " hidden"}`}>
+              User Tags
+            </span>
+            {!sidebarExpanded && (
+              <ToolTipComponent toolTipText="user tags" position="right" />
+            )}
           </div>
         </div>
         <div
@@ -137,6 +192,16 @@ const Sidebar = ({ handleLogout }) => {
             );
           })}
         </div>
+      </div>
+      <div
+        className="collapseBtnContainer"
+        onClick={() => dispatch({ type: "SIDEBAR_EXPAND" })}
+      >
+        <img
+          src={sidebarExpanded ? leftArrowPng : rightArrowPng}
+          alt="expand/collapse"
+          width="20"
+        />
       </div>
     </div>
   );
